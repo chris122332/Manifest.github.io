@@ -231,49 +231,44 @@
                     </label>
                 </div>
                 
-                <h3>👤 Conta</h3>
-                <div class="config-option profile-info">
-                    <span>Foto de Perfil</span>
-                    <div class="profile-area">
-                        <img id="profile-pic-preview" src="default-avatar.png" alt="Avatar" class="profile-avatar">
-                        <button id="change-profile-pic-btn">Mudar Foto</button>
-                    </div>
-                </div>
+                <h3 style="margin-top: 40px;">👤 Minha Conta</h3>
                 
-                <div class="config-option">
-                    <span>Gerenciar Dados de Login e E-mail</span>
-                    <button id="edit-account-btn">Editar Conta</button>
+                <div class="config-option" style="flex-direction: column; align-items: flex-start; gap: 10px; border-bottom: 1px solid #333; padding-bottom: 20px;">
+                    <span style="font-weight: bold; color: #00ff80; margin-bottom: 10px;">Informações de Perfil:</span>
+                    <div style="display: flex; align-items: center; gap: 15px; width: 100%;">
+                        <img id="profile-pic-preview" src="default-avatar.png" alt="Avatar" class="profile-avatar" style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 3px solid #1e90ff;">
+                        
+                        <input type="text" id="edit-username" placeholder="Nome de Usuário" style="margin-bottom: 0; max-width: 200px; padding: 10px; font-size: 1rem;">
+                        <button id="save-username-btn" style="padding: 8px 15px; font-size: 0.9rem; letter-spacing: 0;">Salvar Nome</button>
+                    </div>
+                    
+                    <input type="text" id="edit-email" placeholder="Email" style="margin-top: 15px; margin-bottom: 0; padding: 10px; font-size: 1rem;">
+                    <input type="text" id="edit-password" placeholder="Nova Senha" style="margin-top: 15px; margin-bottom: 0; padding: 10px; font-size: 1rem;">
+                    <button id="save-account-btn" style="margin-top: 20px; font-size: 1rem;">Salvar Alterações de Login</button>
+                    <div id="personalize-message" style="margin-top: 10px;"></div>
                 </div>
+
                 <div class="config-option">
-                    <span>Exportar Dados Pessoais</span>
+                    <span>Exportar Dados Pessoais (JSON)</span>
                     <button id="export-data-btn">Exportar</button>
                 </div>
+
+                <div class="config-option">
+                    <span>Sair da Conta (Logout)</span>
+                    <button id="logout-btn" class="back-button" style="background: #ff4444 !important; color: #fff; box-shadow: 0 5px 10px rgba(255, 68, 68, 0.4) !important; animation: none;">Sair</button>
+                </div>
                 
+                <div class="config-option" style="border-bottom: none;">
+                    <span>Deletar Conta Permanentemente</span>
+                    <button id="delete-account-btn" class="back-button" style="background: #555 !important; color: #ccc; box-shadow: none !important; animation: none;">Deletar</button>
+                </div>
+
             </div>
         </div>
         
-        <div id="personalize-sub-screen" class="sub-screen support-sub">
-            <button class="back-button" data-target-sub="config-sub-screen" data-screen-type="support">Voltar</button>
-            <h2>Personalizar Minha Conta</h2>
-            <div class="container">
-                <p>Altere suas informações de conta. Elas serão salvas localmente no JSON (simulação).</p>
-                <input type="text" id="edit-username" placeholder="Novo Nome de Usuário">
-                <input type="text" id="edit-email" placeholder="Novo Email">
-                <input type="text" id="edit-password" placeholder="Nova Senha">
-                
-                <label for="edit-profile-pic" class="file-upload-label">
-                    Mudar Foto de Perfil (Opcional)
-                </label>
-                <input type="file" id="edit-profile-pic" accept="image/*" style="display: none;">
-                
-                <button id="save-account-btn">Salvar Alterações</button>
-                <div id="personalize-message"></div>
-            </div>
         </div>
 
-      </div>
-
-      <div id="signup-screen" class="content-screen">
+      <div id="signup-screen" class="content-screen active">
         
         <div id="signup-cards-view" class="active">
             
@@ -422,7 +417,7 @@
     const widgetProfilePic = document.getElementById('widget-profile-pic');
     const userProfileWidget = document.getElementById('user-profile-widget');
     const sidebar = document.querySelector('.sidebar');
-    const mainLayout = document.querySelector('.main-layout'); // NOVO: Elemento principal
+    const mainLayout = document.querySelector('.main-layout'); 
 
     // Elementos do Switch de Tema
     const themeSwitch = document.getElementById('theme-switch');
@@ -430,6 +425,15 @@
     // Elemento do Título Principal
     const mainTitle = document.getElementById('main-title');
 
+    // NOVOS Elementos de Configuração e Edição
+    const editUsernameInput = document.getElementById('edit-username');
+    const editEmailInput = document.getElementById('edit-email');
+    const editPasswordInput = document.getElementById('edit-password');
+    const saveAccountBtn = document.getElementById('save-account-btn');
+    const personalizeMessage = document.getElementById('personalize-message');
+    const saveUsernameBtn = document.getElementById('save-username-btn');
+    const logoutBtn = document.getElementById('logout-btn');
+    const deleteAccountBtn = document.getElementById('delete-account-btn');
 
     // ----------------------------------------------------
     // FUNÇÕES DE CONTA E PERSISTÊNCIA (JSON LOCAL)
@@ -449,6 +453,12 @@
         updateProfileDisplay();
     }
     
+    // NOVO: Função para remover a conta
+    function removeAccount() {
+        localStorage.removeItem(ACCOUNT_STORAGE_KEY);
+        updateProfileDisplay();
+    }
+    
     // Função para simular o login
     document.getElementById('login-btn').addEventListener('click', () => {
         const emailOrUsername = document.getElementById('login-email').value;
@@ -465,9 +475,11 @@
             
             // Remove a classe de tela cheia e vai para a Home
             setTimeout(() => {
+                updateProfileDisplay(); // Atualiza, remove a classe logged-out e mostra o site
                 showScreen('home-screen');
-                updateProfileDisplay(); // Atualiza e remove a classe logged-out
                 loginMessage.textContent = ''; 
+                document.getElementById('login-email').value = '';
+                document.getElementById('login-password').value = '';
             }, 1500);
             
         } else {
@@ -507,9 +519,13 @@
                 createMessage.textContent = '✅ Conta criada com sucesso! Faça login.';
                 createMessage.style.color = '#00ff80';
                 setTimeout(() => {
-                    showScreen('login-sub-screen'); // Vai para a tela de login
+                    // Vai para a tela de login
+                    showSubScreen('login-sub-screen', 'signup');
                     document.getElementById('login-email').value = email; // Preenche o email
                     createMessage.textContent = ''; 
+                    document.getElementById('new-username').value = '';
+                    document.getElementById('new-email').value = '';
+                    document.getElementById('new-password').value = '';
                 }, 1500);
             };
             reader.readAsDataURL(fileInput.files[0]);
@@ -519,12 +535,139 @@
             createMessage.textContent = '✅ Conta criada com sucesso! Faça login.';
             createMessage.style.color = '#00ff80';
             setTimeout(() => {
-                showScreen('login-sub-screen');
+                showSubScreen('login-sub-screen', 'signup');
                 document.getElementById('login-email').value = email;
                 createMessage.textContent = '';
+                document.getElementById('new-username').value = '';
+                document.getElementById('new-email').value = '';
+                document.getElementById('new-password').value = '';
             }, 1500);
         }
     });
+
+    // NOVO: Função para Logout
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+            if (confirm('Tem certeza que deseja sair da sua conta?')) {
+                removeAccount();
+                showScreen('signup-screen');
+                showSubScreen('signup-cards-view', 'signup');
+                // Limpa os campos de edição
+                if(editUsernameInput) editUsernameInput.value = '';
+                if(editEmailInput) editEmailInput.value = '';
+                if(editPasswordInput) editPasswordInput.value = '';
+                if (personalizeMessage) {
+                    personalizeMessage.textContent = 'Você saiu da conta com sucesso.';
+                    personalizeMessage.style.color = '#00ff80';
+                    setTimeout(() => { personalizeMessage.textContent = ''; }, 3000);
+                }
+            }
+        });
+    }
+
+    // NOVO: Função para Deletar Conta
+    if (deleteAccountBtn) {
+        deleteAccountBtn.addEventListener('click', () => {
+            const confirmation = prompt("ATENÇÃO: Digite 'DELETAR MINHA CONTA' para confirmar a exclusão permanente de todos os seus dados locais. Esta ação é IRREVERSÍVEL!");
+            
+            if (confirmation === 'DELETAR MINHA CONTA') {
+                removeAccount();
+                showScreen('signup-screen');
+                showSubScreen('signup-cards-view', 'signup');
+                alert('✅ Sua conta foi deletada permanentemente com sucesso.');
+                // Limpa os campos de edição
+                if(editUsernameInput) editUsernameInput.value = '';
+                if(editEmailInput) editEmailInput.value = '';
+                if(editPasswordInput) editPasswordInput.value = '';
+            } else if (confirmation !== null) {
+                alert('❌ Confirmação incorreta. A conta não foi deletada.');
+            }
+        });
+    }
+    
+    // NOVO: Função para salvar o nome de usuário (minimalista)
+    if (saveUsernameBtn) {
+        saveUsernameBtn.addEventListener('click', () => {
+            const account = getAccount();
+            const newUsername = editUsernameInput.value.trim();
+            
+            if (!account) {
+                personalizeMessage.textContent = '❌ Por favor, faça login primeiro.';
+                personalizeMessage.style.color = '#ff4444';
+                return;
+            }
+            if (!newUsername) {
+                personalizeMessage.textContent = '❌ O campo de nome de usuário não pode estar vazio.';
+                personalizeMessage.style.color = '#ff4444';
+                return;
+            }
+            
+            account.username = newUsername;
+            saveAccount(account);
+            personalizeMessage.textContent = '✅ Nome de usuário atualizado!';
+            personalizeMessage.style.color = '#00ff80';
+            editUsernameInput.value = ''; // Limpa o campo
+            
+            // Atualiza o placeholder
+            editUsernameInput.placeholder = `Nome atual: ${newUsername}`;
+
+            setTimeout(() => { personalizeMessage.textContent = ''; }, 3000);
+        });
+    }
+    
+    // NOVO: Função para salvar Email e Senha (refatorado)
+    if (saveAccountBtn) {
+        saveAccountBtn.addEventListener('click', () => {
+            const account = getAccount();
+            const newEmail = editEmailInput.value.trim();
+            const newPassword = editPasswordInput.value.trim();
+
+            if (!account) {
+                personalizeMessage.textContent = '❌ Por favor, faça login primeiro.';
+                personalizeMessage.style.color = '#ff4444';
+                return;
+            }
+
+            let updated = false;
+            if (newEmail) {
+                // Simples validação de e-mail
+                if (!newEmail.includes('@') || !newEmail.includes('.')) {
+                    personalizeMessage.textContent = '❌ Email inválido. Certifique-se de incluir @ e .';
+                    personalizeMessage.style.color = '#ff4444';
+                    return;
+                }
+                account.email = newEmail;
+                editEmailInput.value = '';
+                updated = true;
+            }
+            if (newPassword) {
+                // Simples validação de senha
+                if (newPassword.length < 4) {
+                    personalizeMessage.textContent = '❌ A nova senha deve ter pelo menos 4 caracteres.';
+                    personalizeMessage.style.color = '#ff4444';
+                    return;
+                }
+                account.password = newPassword;
+                editPasswordInput.value = '';
+                updated = true;
+            }
+            
+            if (updated) {
+                saveAccount(account);
+                personalizeMessage.textContent = '✅ Email/Senha atualizados com sucesso!';
+                personalizeMessage.style.color = '#00ff80';
+                 // Atualiza o placeholder do email
+                if (newEmail) {
+                     editEmailInput.placeholder = `Email atual: ${newEmail}`;
+                }
+            } else {
+                personalizeMessage.textContent = '⚠️ Nenhum campo de email ou senha foi preenchido para salvar.';
+                personalizeMessage.style.color = '#ffaa00';
+            }
+            
+            setTimeout(() => { personalizeMessage.textContent = ''; }, 3000);
+        });
+    }
 
 
     // ----------------------------------------------------
@@ -532,7 +675,7 @@
     // ----------------------------------------------------
 
     /**
-     * NOVO: Controla a visibilidade da barra lateral e do widget de perfil.
+     * Controla a visibilidade da barra lateral e do widget de perfil.
      * @param {boolean} loggedIn Se o usuário está logado.
      */
     function toggleSiteVisibility(loggedIn) {
@@ -540,11 +683,13 @@
             // MOSTRA O CONTEÚDO (LOGADO)
             userProfileWidget.classList.remove('logged-out');
             mainLayout.classList.remove('logged-out'); 
+            if (mainTitle) mainTitle.style.display = 'block';
         } else {
             // ESCONDE O CONTEÚDO (DESLOGADO)
             userProfileWidget.classList.add('logged-out');
             mainLayout.classList.add('logged-out'); 
-            
+            if (mainTitle) mainTitle.style.display = 'none';
+
             // Certifica-se de que a tela de login/cadastro é a única visível
             showScreen('signup-screen');
             showSubScreen('signup-cards-view', 'signup');
@@ -568,11 +713,18 @@
             profilePicElement.src = profilePic;
         }
         
-        // NOVO: Chama o controle de visibilidade
+        // Chama o controle de visibilidade
         toggleSiteVisibility(isLoggedIn);
     }
 
     function showScreen(targetId) {
+        // Ignora a navegação se estiver em modo logged-out e o target não for signup ou terms/about
+        const isLoggedIn = !!getAccount();
+        if (!isLoggedIn && targetId !== 'signup-screen' && targetId !== 'terms-screen' && targetId !== 'about-screen') {
+            showScreen('signup-screen');
+            return;
+        }
+        
         contentScreens.forEach(screen => {
             screen.classList.remove('active');
         });
@@ -586,11 +738,8 @@
             }
         });
         
-        // Se for para uma tela que não é o Sign-up, garante que o título principal apareça
-        if (targetId !== 'signup-screen' && mainTitle) {
-            mainTitle.style.display = 'block';
-        } else if (mainTitle) {
-             // O CSS .logged-out já esconde, mas por garantia:
+        // Controla o display do H1 (mainTitle)
+        if (mainTitle) {
             mainTitle.style.display = mainLayout.classList.contains('logged-out') ? 'none' : 'block';
         }
     }
@@ -613,13 +762,28 @@
         targetSubScreens.forEach(sub => {
             sub.classList.remove('active');
         });
-        targetCardView.classList.remove('active');
+        if (targetCardView) targetCardView.classList.remove('active');
         
         // Mostra o target
-        if (targetId.includes('cards-view')) {
+        if (targetId) {
             document.getElementById(targetId).classList.add('active');
         } else {
-            document.getElementById(targetId).classList.add('active');
+            // Fallback para mostrar a view de cards, se o target for nulo/inválido
+             if (targetCardView) targetCardView.classList.add('active');
+        }
+        
+        // NOVO: Limpa a mensagem de feedback e carrega os dados de edição se for a tela de config
+        if (targetId === 'config-sub-screen') {
+            const account = getAccount();
+            if(account) {
+                if(editUsernameInput) editUsernameInput.placeholder = `Nome atual: ${account.username}`;
+                if(editEmailInput) editEmailInput.placeholder = `Email atual: ${account.email}`;
+            } else {
+                 if(editUsernameInput) editUsernameInput.placeholder = 'Nome de Usuário';
+                 if(editEmailInput) editEmailInput.placeholder = 'Email';
+            }
+            if(editPasswordInput) editPasswordInput.placeholder = 'Nova Senha';
+            if(personalizeMessage) personalizeMessage.textContent = ''; 
         }
     }
 
@@ -633,19 +797,14 @@
             e.preventDefault();
             const target = link.dataset.target;
             
-            // Se o usuário não estiver logado e tentar ir para Home ou Suporte, barra
-            if (!getAccount() && (target === 'home-screen' || target === 'support-screen')) {
-                showScreen('signup-screen');
-                return;
-            }
-            
+            // A função showScreen já lida com a restrição de navegação quando deslogado
             showScreen(target);
             
             // Certifica-se de que a visualização de cards da tela é exibida por padrão
             if (target === 'home-screen') showSubScreen('home-cards-view', 'home');
             if (target === 'support-screen') showSubScreen('support-cards-view', 'support');
-            if (target === 'signup-screen') showSubScreen('signup-cards-view', 'signup');
-
+            // O Sign-up sempre vai para o view de cards
+            if (target === 'signup-screen') showSubScreen('signup-cards-view', 'signup'); 
         });
     });
 
@@ -653,7 +812,10 @@
     featureCards.forEach(card => {
         card.addEventListener('click', () => {
             const targetSub = card.dataset.targetSub;
-            const screenType = card.closest('.content-screen').id.split('-')[0]; // home, support, signup
+            const screenElement = card.closest('.content-screen');
+            if (!screenElement) return;
+
+            const screenType = screenElement.id.split('-')[0]; // home, support, signup
             showSubScreen(targetSub, screenType);
         });
     });
@@ -758,13 +920,9 @@
         `;
     }
 
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', () => {
-            if (link.dataset.target === 'home-screen') {
-                 document.querySelector('.feature-card[data-target-sub="list-sub-screen"]').addEventListener('click', loadIdList, { once: true });
-            }
-        });
-    });
+    // Inicializa o listener da lista de IDs
+    document.querySelector('.feature-card[data-target-sub="list-sub-screen"]').addEventListener('click', loadIdList, { once: true });
+
 
     // ----------------------------------------------------
     // INICIALIZAÇÃO
@@ -774,9 +932,13 @@
 
     const currentAccount = getAccount();
     if (!currentAccount) {
+        // Se não estiver logado, garante que a tela de Sign-Up esteja ativa
         showScreen('signup-screen'); 
+        showSubScreen('signup-cards-view', 'signup');
     } else {
+        // Se estiver logado, vai para a Home
         showScreen('home-screen'); 
+        showSubScreen('home-cards-view', 'home');
     }
 </script>
 

@@ -312,7 +312,7 @@ h3 {
   box-shadow: 0 5px 20px rgba(0,0,0,0.9); /* Sombra inicial mais forte */
   width: 100%;
   max-width: 300px; /* Um pouco maior */
-  min-height: 280px; /* Mais alto */
+  min-height: 150px; /* MODIFICADO: Reduzido para ficar retangular e mais achatado */
   overflow: hidden;
   text-align: center;
   cursor: pointer;
@@ -355,7 +355,7 @@ h3 {
 .card-content-wrapper {
     position: relative;
     z-index: 2;
-    padding: 40px 20px; /* Mais padding */
+    padding: 20px 20px; /* MODIFICADO: Reduzido o padding vertical para ajustar ao novo min-height */
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -366,85 +366,106 @@ h3 {
 }
 
 .card-icon {
-  font-size: 60px; /* Ícone maior */
-  color: #1e90ff;
-  margin-bottom: 20px;
-  text-shadow: 0 0 15px #1e90ff, 0 0 20px rgba(30, 144, 255, 0.5); /* Glow mais forte no ícone */
-  transition: color 0.5s, text-shadow 0.5s;
+    font-size: 60px; /* Ícone maior */
+    color: #1e90ff;
+    margin-bottom: 5px; /* Reduzido o margin-bottom para caber no card achatado */
+    text-shadow: 0 0 15px #1e90ff, 0 0 20px rgba(30, 144, 255, 0.5); /* Glow mais forte no ícone */
+    transition: color 0.5s, text-shadow 0.5s;
 }
 
 /* Ícone Laranja para Cards de Suporte */
 .support-card .card-icon {
-    color: #ffa500; 
-    text-shadow: 0 0 15px #ffa500, 0 0 20px rgba(255, 165, 0, 0.5); 
+    color: #ffa500;
+    text-shadow: 0 0 15px #ffa500, 0 0 20px rgba(255, 165, 0, 0.5);
 }
 
 .card-title {
-  font-size: 1.6rem; /* Título maior */
-  font-weight: bold;
-  margin: 10px 0;
-  color: #fff;
-  font-family: 'Orbitron', sans-serif;
-  transition: color 0.5s;
+    font-size: 1.6rem; /* Título maior */
+    font-weight: bold;
+    margin: 5px 0; /* Reduzido o margin para caber no card achatado */
+    color: #fff;
+    font-family: 'Orbitron', sans-serif;
+    transition: color 0.5s;
 }
 
 .card-subtitle {
-  font-size: 1.0rem; /* Subtítulo maior */
-  color: #b0b0b0;
-  transition: color 0.5s;
+    font-size: 1.0rem; /* Subtítulo maior */
+    color: #b0b0b0;
+    transition: color 0.5s;
+}
+
+
+/* Container de Formulário (Home, Login, Report) */
+.container {
+    background: rgba(10, 10, 10, 0.9); /* Fundo mais escuro */
+    padding: 40px; /* Aumentado */
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.7); /* Sombra mais forte */
+    width: 100%;
+    max-width: 500px;
+    margin-top: 20px;
+    transition: background 0.5s, box-shadow 0.5s;
+}
+
+.container p {
+    color: #ccc;
+    font-size: 1rem;
+    margin-bottom: 20px;
+    text-align: center;
 }
 
 /* Input, Textarea (Estilo Gamer/Steam Aprimorado) */
-input[type="text"], textarea {
-  padding: 18px; /* Mais padding */
-  font-size: 18px;
-  border-radius: 8px; /* Borda um pouco mais arredondada */
-  border: 3px solid #1e90ff; /* Borda mais grossa */
-  outline: none;
-  background: #1a1a1a; /* Fundo mais escuro */
-  color: #00ff80; /* Texto em cor de destaque */
-  box-shadow: inset 0 0 8px rgba(30, 144, 255, 0.8); /* Inset shadow forte */
-  transition: border-color 0.3s, box-shadow 0.3s, background 0.5s, color 0.5s;
-  margin-bottom: 20px;
-  width: 100%;
-  resize: vertical;
-  font-family: 'Orbitron', sans-serif;
+input[type="text"], textarea, input[type="file"] {
+    padding: 18px; /* Mais padding */
+    font-size: 18px;
+    border-radius: 8px; /* Borda um pouco mais arredondada */
+    border: 3px solid #1e90ff; /* Borda mais grossa */
+    outline: none;
+    background: #1a1a1a; /* Fundo mais escuro */
+    color: #00ff80; /* Texto em cor de destaque */
+    box-shadow: inset 0 0 8px rgba(30, 144, 255, 0.8); /* Inset shadow forte */
+    transition: border-color 0.3s, box-shadow 0.3s, background 0.5s, color 0.5s;
+    margin-bottom: 20px;
+    width: 100%;
+    resize: vertical;
+    font-family: 'Orbitron', sans-serif;
 }
 
 textarea {
-  min-height: 180px; /* Mais alto */
+    min-height: 180px; /* Mais alto */
 }
 
 input[type="text"]:focus, textarea:focus {
-  border-color: #00ff80; /* Borda focada em verde neon */
-  box-shadow: 0 0 20px rgba(0, 255, 128, 0.9), inset 0 0 5px rgba(0, 255, 128, 0.5); /* Glow verde forte */
-  background: #252525;
+    border-color: #00ff80; /* Borda focada em verde neon */
+    box-shadow: 0 0 20px rgba(0, 255, 128, 0.9), inset 0 0 5px rgba(0, 255, 128, 0.5); /* Glow verde forte */
+    background: #252525;
 }
 
+
 button, #download-button {
-  padding: 16px 30px; /* Mais padding */
-  font-size: 19px; /* Texto maior */
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-  transition: 0.3s, transform 0.1s;
-  text-transform: uppercase;
-  letter-spacing: 2px; /* Mais espaçamento */
-  font-family: 'Orbitron', sans-serif;
+    padding: 16px 30px; /* Mais padding */
+    font-size: 19px; /* Texto maior */
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s, transform 0.1s;
+    text-transform: uppercase;
+    letter-spacing: 2px; /* Mais espaçamento */
+    font-family: 'Orbitron', sans-serif;
 }
 
 button {
-  background: #1e90ff;
-  color: #fff;
-  /* Efeito de pulse sutil nos botões */
-  animation: button-glow 3s infinite;
+    background: #1e90ff;
+    color: #fff;
+    /* Efeito de pulse sutil nos botões */
+    animation: button-glow 3s infinite;
 }
 
 button:hover {
-  background: #00ccff; /* Ciano mais intenso */
-  transform: translateY(-3px) scale(1.02); /* Efeito de 3D push mais evidente */
-  box-shadow: 0 10px 20px rgba(30, 144, 255, 0.8), 0 0 10px #fff; /* Sombra/Glow mais forte e branco */
+    background: #00ccff; /* Ciano mais intenso */
+    transform: translateY(-3px) scale(1.02); /* Efeito de 3D push mais evidente */
+    box-shadow: 0 10px 20px rgba(30, 144, 255, 0.8), 0 0 10px #fff; /* Sombra/Glow mais forte e branco */
 }
 
 /* Botão de Envio de Reporte */
@@ -453,126 +474,147 @@ button:hover {
     animation: none; /* Remove a animação padrão */
     box-shadow: 0 5px 10px rgba(255, 165, 0, 0.4);
 }
-
 #report-button:hover {
-    background: #ffcc66; /* Laranja mais claro */
-    box-shadow: 0 10px 20px rgba(255, 165, 0, 0.9), 0 0 10px #fff;
+    background: #ffc266;
+    box-shadow: 0 10px 20px rgba(255, 165, 0, 0.8), 0 0 10px #fff;
 }
 
-/* Botões de Ação Secundária (Verde/Success) */
-#download-button, #create-account-btn, #save-account-btn, #export-data-btn {
-    background: #00ff80; /* Cor Verde Neon */
-    color: #101010;
-    animation: none; /* Remove a animação padrão */
-    box-shadow: 0 5px 10px rgba(0, 255, 128, 0.6);
-    display: inline-block;
-    text-decoration: none;
-}
 
-#download-button:hover, #create-account-btn:hover, #save-account-btn:hover, #export-data-btn:hover {
-    background: #33ff99;
-    color: #000;
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 10px 20px rgba(0, 255, 128, 0.9), 0 0 10px #fff;
-}
-
+/* Estilo do Botão de Voltar */
 .back-button {
-    background: #333 !important;
-    box-shadow: none !important;
-    margin-bottom: 30px;
-    letter-spacing: 1px !important;
+    align-self: flex-start; /* Alinha à esquerda */
+    margin-bottom: 25px; /* Mais espaço para o botão */
+    background: #333; /* Cinza Escuro */
+    color: #ccc;
+    font-size: 1rem;
+    padding: 10px 20px;
+    letter-spacing: 1px;
+    animation: none;
+    box-shadow: none;
 }
-
 .back-button:hover {
-    background: #555 !important;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 10px rgba(0,0,0,0.5) !important;
+    background: #555;
+    color: #fff;
+    transform: none;
+    box-shadow: 0 0 10px rgba(204, 204, 204, 0.3);
 }
 
-/* Outros ajustes de Containers/Conteúdo para o novo fundo */
-.container, #id-list-content, #download-content, .faq-content, .report-content, .config-content {
-    background: rgba(20, 20, 20, 0.95); /* Fundo mais escuro/opaco */
-    backdrop-filter: blur(5px);
-    box-shadow: 0 0 30px rgba(0,0,0,0.8);
-    border-radius: 10px;
-    padding: 30px;
+/* Botão de Download (Link com estilo de botão) */
+#download-button {
+    text-decoration: none;
+    display: inline-block;
+    background: #00ff80; /* Verde Neon */
+    color: #000;
+    font-weight: bold;
+    text-shadow: none;
     margin-top: 20px;
+    box-shadow: 0 5px 10px rgba(0, 255, 128, 0.5);
+    animation: none;
+}
+#download-button:hover {
+    background: #33ff99;
+    box-shadow: 0 10px 20px rgba(0, 255, 128, 0.8), 0 0 10px #fff;
+    transform: translateY(-3px) scale(1.02);
+}
+
+/* Estilo para FAQ (Acordeão) */
+.faq-content {
     width: 100%;
+    max-width: 800px;
+    margin-top: 20px;
 }
 
-/* Ajustes para FAQ (Acordeão) */
 .faq-item {
-    background: #1a1a1a;
-    border-radius: 5px;
+    background: #151515;
     margin-bottom: 10px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
-    border-left: 5px solid #1e90ff;
-    transition: border-left-color 0.3s;
-}
-
-.faq-item:hover {
-    border-left-color: #00ff80;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #333;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    transition: background 0.3s;
 }
 
 .faq-question {
-    padding: 15px 20px;
+    padding: 20px;
     cursor: pointer;
     font-weight: bold;
-    color: #fff;
+    color: #1e90ff; /* Azul para a pergunta */
+    font-size: 1.1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    transition: color 0.3s;
+    transition: background 0.3s, color 0.3s;
 }
 
 .faq-question:hover {
-    color: #00ff80;
+    background: #202020;
 }
 
 .faq-answer {
     padding: 0 20px;
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.3s ease-out, padding 0.3s ease-out;
-    background: #252525;
+    transition: max-height 0.5s ease-in-out, padding 0.5s;
+    background: #1a1a1a;
 }
 
-.faq-answer.open {
-    max-height: 500px; /* Altura máxima razoável */
-    padding: 15px 20px;
-    transition: max-height 0.5s ease-in, padding 0.5s ease-in;
+.faq-answer.active {
+    max-height: 500px; /* Valor grande o suficiente */
+    padding: 20px;
 }
 
 .faq-answer p {
     margin: 0;
+    padding-top: 10px;
+    padding-bottom: 10px;
     color: #ccc;
-    font-size: 0.95rem;
+    line-height: 1.6;
 }
 
 .arrow {
-    font-size: 1.2rem;
+    font-size: 1rem;
     transition: transform 0.3s;
 }
 
-.faq-answer.open + .faq-question .arrow {
+.faq-question.active .arrow {
     transform: rotate(180deg);
 }
 
-/* Ajustes para Configurações */
+/* Estilos de Configuração */
+.config-content {
+    width: 100%;
+    max-width: 600px;
+    margin-top: 20px;
+}
+
 .config-option {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 15px 0;
     border-bottom: 1px solid #333;
+}
+
+.config-option span {
     font-size: 1.1rem;
+    color: #ccc;
 }
 
-.config-option:last-child {
-    border-bottom: none;
+.config-option button {
+    padding: 8px 15px;
+    font-size: 1rem;
+    letter-spacing: 0;
+    background: #444;
+    animation: none;
+    box-shadow: none;
+}
+.config-option button:hover {
+    background: #666;
+    transform: none;
 }
 
-/* Estilo do Switch (Toggle) */
+
+/* SWITCH SLIDER (Toggle) */
 .switch {
   position: relative;
   display: inline-block;
@@ -593,9 +635,10 @@ button:hover {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #555; /* Fundo cinza escuro */
+  background-color: #444;
   transition: .4s;
   border-radius: 34px;
+  box-shadow: inset 0 0 5px rgba(0,0,0,0.7);
 }
 
 .slider:before {
@@ -605,36 +648,79 @@ button:hover {
   width: 26px;
   left: 4px;
   bottom: 4px;
-  background-color: #fff;
+  background-color: white;
   transition: .4s;
   border-radius: 50%;
 }
 
 input:checked + .slider {
-  background-color: #00ff80; /* Fundo verde neon quando ativo */
+  background-color: #00ff80;
 }
 
 input:checked + .slider:before {
   transform: translateX(26px);
+  box-shadow: 0 0 10px rgba(0, 255, 128, 0.8);
 }
 
-/* Tema Claro */
+/* Theming (Tema Claro) */
+
 body.light-theme {
-    color: #1a1a1a;
+    background-color: #f0f0f0;
+    color: #333;
 }
 
 body.light-theme #background-video {
-    filter: blur(5px) brightness(0.9); /* Mais claro */
+    filter: blur(5px) brightness(0.9); /* Vídeo mais claro */
+}
+
+body.light-theme::before {
+    background: linear-gradient(270deg, rgba(255,255,255,0.4), rgba(255,255,255,0.2), rgba(255,255,255,0.4)); 
+    animation: background-flow 30s ease infinite;
+}
+
+body.light-theme h1 {
+    color: #333;
+    text-shadow: 0 0 5px #f0f0f0, 0 0 10px #ff7700, 0 0 15px #ff7700;
+    animation: none; /* Remove a animação de neon no tema claro */
+}
+
+body.light-theme h2 {
+    color: #ff7700;
+    text-shadow: 1px 1px 5px rgba(255, 119, 0, 0.7);
+}
+
+body.light-theme h3 {
+    color: #1e90ff;
+    text-shadow: 1px 1px 5px rgba(30, 144, 255, 0.5);
+}
+
+body.light-theme #user-profile-widget {
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 4px 20px rgba(255, 119, 0, 0.5);
+    border: 1px solid #ff7700;
+}
+body.light-theme #user-profile-widget:hover {
+    background: rgba(240, 240, 240, 0.95);
+    box-shadow: 0 4px 30px rgba(255, 119, 0, 0.8);
+}
+
+body.light-theme #widget-username {
+    color: #333;
+    text-shadow: 0 0 3px #fff, 0 0 7px #ff7700;
+}
+
+body.light-theme #widget-profile-pic {
+    border: 3px solid #ff7700;
+    box-shadow: 0 0 10px rgba(255, 119, 0, 0.9);
 }
 
 body.light-theme .main-layout {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.9);
 }
 
 body.light-theme .sidebar {
-    background: #f0f0f0;
-    box-shadow: 3px 0 15px rgba(0,0,0,0.1);
+    background: rgba(240, 240, 240, 0.95);
+    box-shadow: 3px 0 15px rgba(0,0,0,0.2);
 }
 
 body.light-theme .sidebar-menu li a {
@@ -643,135 +729,185 @@ body.light-theme .sidebar-menu li a {
 
 body.light-theme .sidebar-menu li a:hover,
 body.light-theme .sidebar-menu li a.active {
-    background-color: #e0e0e0;
-    color: #1e90ff; /* Azul de destaque */
-    border-left-color: #1e90ff;
-    text-shadow: none;
-}
-
-body.light-theme .container, 
-body.light-theme #id-list-content, 
-body.light-theme #download-content, 
-body.light-theme .faq-content, 
-body.light-theme .report-content, 
-body.light-theme .config-content {
-    background: #fff;
-    box-shadow: 0 0 20px rgba(0,0,0,0.1);
-}
-
-body.light-theme h1 {
-    color: #1a1a1a;
-    text-shadow: none;
-    animation: none;
-}
-
-body.light-theme h2 {
-    color: #000;
+    background-color: #ddd;
+    color: #ff7700;
+    border-left-color: #ff7700;
     text-shadow: none;
 }
 
 body.light-theme .feature-card {
-    background: #fff;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    border-color: #ccc;
+    background: #fcfcfc;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    border: 3px solid #ccc;
+}
+body.light-theme .feature-card:hover {
+    box-shadow: 0 0 25px rgba(255, 119, 0, 0.9), 0 0 40px rgba(255, 119, 0, 0.4); 
+    border-color: #ff7700;
 }
 
-body.light-theme .feature-card:not(.support-card):hover {
-    box-shadow: 0 5px 15px rgba(30, 144, 255, 0.5); 
+body.light-theme .support-card:hover {
+    box-shadow: 0 0 25px rgba(30, 144, 255, 0.9), 0 0 40px rgba(30, 144, 255, 0.4); 
     border-color: #1e90ff;
 }
 
+body.light-theme .feature-card:not(.support-card):hover {
+    box-shadow: 0 0 25px rgba(255, 119, 0, 0.9), 0 0 40px rgba(255, 119, 0, 0.4); 
+    border-color: #ff7700;
+}
+
+body.light-theme .card-content-wrapper {
+    background: rgba(255, 255, 255, 0.8);
+}
+
 body.light-theme .card-icon {
-    text-shadow: none;
+    color: #ff7700;
+    text-shadow: 0 0 15px #ff7700, 0 0 20px rgba(255, 119, 0, 0.5);
+}
+
+body.light-theme .support-card .card-icon {
+    color: #1e90ff;
+    text-shadow: 0 0 15px #1e90ff, 0 0 20px rgba(30, 144, 255, 0.5);
+}
+
+body.light-theme .card-title {
+    color: #333;
+}
+
+body.light-theme .card-subtitle {
+    color: #666;
+}
+
+body.light-theme .container {
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+body.light-theme .container p {
+    color: #666;
+}
+
+body.light-theme input[type="text"], body.light-theme textarea, body.light-theme input[type="file"] {
+    border: 3px solid #ff7700;
+    background: #fff;
+    color: #333;
+    box-shadow: inset 0 0 8px rgba(255, 119, 0, 0.5);
+}
+
+body.light-theme input[type="text"]:focus, body.light-theme textarea:focus {
+    border-color: #1e90ff;
+    box-shadow: 0 0 20px rgba(30, 144, 255, 0.9), inset 0 0 5px rgba(30, 144, 255, 0.5);
+    background: #f9f9f9;
 }
 
 body.light-theme button {
-    background: #1e90ff;
+    background: #ff7700;
     color: #fff;
     animation: none;
-    box-shadow: 0 5px 10px rgba(30, 144, 255, 0.4);
 }
 
 body.light-theme button:hover {
-    background: #1a1a1a;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    background: #ffaa00;
+    box-shadow: 0 10px 20px rgba(255, 119, 0, 0.8), 0 0 10px #333;
 }
 
-/* NOVO: Estilos da Tela de Login Full-Screen (Logged-Out) */
-
-/* 1. Faz o main-layout ocupar 100% da viewport e centraliza o content. */
-.main-layout.logged-out { 
-    flex-direction: column; 
-    width: 100vw;
-    min-height: 100vh;
-    padding: 0;
-    background: transparent; /* Remove o fundo opaco do layout principal */
-    backdrop-filter: none;
+body.light-theme .faq-item {
+    background: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
-/* 2. Garante que a Sidebar e o Título principal fiquem invisíveis */
-.main-layout.logged-out .sidebar,
-.main-layout.logged-out #main-title {
-    display: none !important; 
+body.light-theme .faq-question {
+    color: #ff7700;
 }
 
-/* 3. Garante que o widget de perfil flutuante também suma. */
-#user-profile-widget.logged-out {
-    display: none !important;
+body.light-theme .faq-question:hover {
+    background: #f5f5f5;
 }
 
-/* 4. Centraliza o conteúdo (tela de Sign-Up) na tela. */
+body.light-theme .faq-answer {
+    background: #f9f9f9;
+}
+
+body.light-theme .faq-answer p {
+    color: #333;
+}
+
+/* --- MODIFICAÇÕES ESPECÍFICAS PARA A TELA DE LOGIN (logged-out) - INÍCIO --- */
+
+/* 1. Remover a barra lateral (mn) */
+.main-layout.logged-out .sidebar {
+    display: none;
+}
+
+/* 2. Definir proporções 1280x720px, Centralizar e Ajustar o Layout */
+.main-layout.logged-out {
+    /* Centraliza o layout principal na tela */
+    position: fixed; 
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    /* Define as dimensões desejadas */
+    width: 1280px; 
+    height: 720px; 
+    
+    /* Garante que não ultrapasse a janela do navegador */
+    max-width: 100%; 
+    max-height: 100vh;
+    
+    /* Garante que o conteúdo não saia do limite e permite rolagem interna se necessário */
+    overflow: hidden; 
+}
+
+/* O conteúdo principal deve ocupar toda a largura e altura do novo .main-layout */
 .main-layout.logged-out .content {
-    flex: 1; 
-    display: flex;
-    flex-direction: column;
-    justify-content: center; /* Centraliza verticalmente */
-    align-items: center; /* Centraliza horizontalmente */
-    width: 100%;
-    height: 100%; /* Ocupa o espaço restante */
-    padding: 0;
-}
-
-/* 5. Garante que SOMENTE a tela de Sign-Up (e suas subs) seja visível. */
-/* E que a home-screen não apareça mesmo se tiver a classe active */
-.main-layout.logged-out .content-screen:not(#signup-screen) {
-    display: none !important;
-}
-
-/* 6. Ajusta o container de Login/Cadastro para aparecer bem no centro */
-.main-layout.logged-out .container, 
-.main-layout.logged-out #signup-screen {
-    max-width: 450px !important; 
-    padding: 30px;
-}
-
-.main-layout.logged-out #signup-cards-view {
-    justify-content: center;
-    gap: 20px;
+    width: 100%; 
+    flex-grow: 1;
     max-width: 100%;
+    height: 100%;
+    overflow-y: auto; 
 }
 
 
-/* Media Query para responsividade em telas menores */
-@media (max-width: 768px) {
+/* 3. Cartões em baixo do outro na tela de Sign-Up */
+#signup-cards-view.active {
+    /* Força a coluna para empilhar os cartões */
+    flex-direction: column; 
+    gap: 30px; 
+    
+    /* Centraliza o contêiner de cartões e limita sua largura para melhor visualização */
+    max-width: 350px; 
+    width: 100%;
+    margin: 30px auto 0 auto; 
+}
+
+/* Garante que cada cartão ocupe 100% da largura do seu contêiner (350px) */
+#signup-cards-view .feature-card {
+    max-width: 100%; 
+}
+
+/* --- MODIFICAÇÕES ESPECÍFICAS PARA A TELA DE LOGIN (logged-out) - FIM --- */
+
+
+/* Media Query para Responsividade em Telas Menores (NOVO) */
+@media (max-width: 900px) {
     
     .main-layout {
-        flex-direction: column; /* Pilha a sidebar e o conteúdo */
+        flex-direction: column; /* Coloca sidebar em cima */
     }
 
     .sidebar {
-        width: 100%; /* Sidebar em tela cheia */
+        width: 100%;
         padding-top: 10px;
-        position: static;
         box-shadow: 0 3px 15px rgba(0,0,0,0.9);
-        z-index: 5;
+        height: auto;
     }
     
     .sidebar-menu {
-        display: flex; /* Transforma em barra de navegação horizontal */
-        overflow-x: auto;
-        padding: 0 10px;
-        white-space: nowrap;
+        display: flex;
+        overflow-x: auto; /* Permite scroll horizontal */
+        padding: 10px 0;
+        justify-content: flex-start; /* Alinha links à esquerda no scroll */
     }
     
     .sidebar-menu li {
@@ -816,21 +952,21 @@ body.light-theme button:hover {
         align-items: flex-start;
         gap: 10px;
     }
-    
-    /* NOVO: Ajuste do Widget de Perfil em telas menores (abaixo do h1) */
-    #user-profile-widget {
-        position: relative; /* Volta para o fluxo normal */
-        top: auto;
-        left: auto;
-        right: auto; 
-        margin: 10px auto 20px auto; 
-        width: fit-content;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5); 
-    }
 
-    /* Regras de Login para Mobile */
+    /* O layout fixo 1280x720 deve ser desativado em telas menores */
+    .main-layout.logged-out {
+        position: relative;
+        transform: none;
+        width: 100%;
+        height: auto;
+        max-height: none;
+        overflow: auto;
+    }
+    
     .main-layout.logged-out .content {
-        /* Apenas garante que o container não se esprema demais */
-        padding: 20px;
+        padding: 20px; /* Garante padding responsivo */
+        height: auto;
+        overflow-y: auto;
     }
 }
+/* FIM MEDIA QUERY */
