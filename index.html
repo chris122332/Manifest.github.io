@@ -24,7 +24,7 @@
       <ul class="sidebar-menu">
         <li><a href="#" class="nav-link active" data-target="home-screen">Home</a></li>
         <li><a href="#" class="nav-link" data-target="support-screen">Suporte</a></li>
-        <li><a href="#" class="nav-link" data-target="signup-screen">Sign-Up</a></li> 
+        <li id="sidebar-signup-link"><a href="#" class="nav-link" data-target="signup-screen">Sign-Up</a></li> 
         <li><a href="#" class="nav-link" data-target="terms-screen">Política e Termos de Uso</a></li>
         <li><a href="#" class="nav-link" data-target="about-screen">Sobre o Projeto</a></li>
         </ul>
@@ -391,7 +391,7 @@
   </div>
 
 <script>
-    // Elementos do DOM
+// Elementos do DOM
     const homeCardsView = document.getElementById('home-cards-view');
     const supportCardsView = document.getElementById('support-cards-view');
     const signupCardsView = document.getElementById('signup-cards-view');
@@ -408,6 +408,7 @@
     const body = document.body;
 
     // Simulação de JSON para a Conta (Local Storage)
+    // O ACCOUNT_STORAGE_KEY agora guarda apenas o status de login e o username
     const ACCOUNT_STORAGE_KEY = 'manifestSampleAccount';
     const THEME_STORAGE_KEY = 'manifestSampleTheme';
     const DEFAULT_AVATAR = 'default-avatar.png';
@@ -419,13 +420,16 @@
     const sidebar = document.querySelector('.sidebar');
     const mainLayout = document.querySelector('.main-layout'); 
 
+    // Link da Sidebar para o Sign-Up
+    const sidebarSignupLink = document.getElementById('sidebar-signup-link');
+
     // Elementos do Switch de Tema
     const themeSwitch = document.getElementById('theme-switch');
 
     // Elemento do Título Principal
     const mainTitle = document.getElementById('main-title');
 
-    // NOVOS Elementos de Configuração e Edição
+    // Elementos de Edição (Manter, mas o foco da alteração de email/senha será removido do local storage)
     const editUsernameInput = document.getElementById('edit-username');
     const editEmailInput = document.getElementById('edit-email');
     const editPasswordInput = document.getElementById('edit-password');
@@ -434,11 +438,20 @@
     const saveUsernameBtn = document.getElementById('save-username-btn');
     const logoutBtn = document.getElementById('logout-btn');
     const deleteAccountBtn = document.getElementById('delete-account-btn');
+    
+    // Elementos da Busca de Jogo
+    const buscarBtn = document.getElementById('buscar');
+    const gameIdInput = document.getElementById('gameId');
+    const resultadoDiv = document.getElementById('resultado');
+
 
     // ----------------------------------------------------
     // FUNÇÕES DE CONTA E PERSISTÊNCIA (JSON LOCAL)
     // ----------------------------------------------------
-
+    
+    /**
+     * @returns {Object|null} Retorna os dados da conta local ou null.
+     */
     function getAccount() {
         const account = localStorage.getItem(ACCOUNT_STORAGE_KEY);
         const accountData = account ? JSON.parse(account) : null;
@@ -448,104 +461,200 @@
         return accountData;
     }
 
+    /**
+     * Salva os dados de sessão (apenas username e foto) no localStorage.
+     * @param {Object} accountData 
+     */
     function saveAccount(accountData) {
         localStorage.setItem(ACCOUNT_STORAGE_KEY, JSON.stringify(accountData));
         updateProfileDisplay();
     }
     
-    // NOVO: Função para remover a conta
+    /**
+     * Remove a sessão.
+     */
     function removeAccount() {
         localStorage.removeItem(ACCOUNT_STORAGE_KEY);
         updateProfileDisplay();
     }
     
-    // Função para simular o login
-    document.getElementById('login-btn').addEventListener('click', () => {
-        const emailOrUsername = document.getElementById('login-email').value;
+    /**
+     * Função centralizada para enviar requisições POST com JSON e tratar a resposta.
+     * @param {string} endpoint - A rota (ex: '/signup', '/login').
+     * @param {Object} data - O objeto JSON a ser enviado.
+     * @param {HTMLElement} messageElement - O elemento para exibir as mensagens de sucesso/erro.
+     */
+    async function sendPostRequest(endpoint, data, messageElement) {
+        messageElement.textContent = 'Aguarde...';
+        messageElement.style.color = '#ffaa00'; // Amarelo/Laranja de carregamento
+
+        try {
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+            
+            // Tratamento especial para a rota de download (/buscar)
+            if (endpoint === '/buscar') {
+                // Se o status for 200 (OK), o servidor pode estar enviando o arquivo (res.download)
+                if (response.ok && response.headers.get('Content-Disposition')) {
+                    messageElement.textContent = '✅ Jogo encontrado! O download deve iniciar em breve.';
+                    messageElement.style.color = '#00ff80';
+                    
+                    // Como não podemos iniciar o download via JS com o res.download do Express, 
+                    // vamos avisar o usuário e tentar fazer o fetch do blob se for JSON de erro
+                    return response; // Retorna a resposta para a rota de busca lidar com ela.
+                } 
+                
+                // Se o status for 200, mas não for um download (ou 4xx/5xx)
+                const jsonResponse = await response.json(); 
+                
+                if (response.ok && jsonResponse.encontrado === false) {
+                     messageElement.textContent = `❌ ${jsonResponse.msg}`;
+                     messageElement.style.color = '#ff4444';
+                     return jsonResponse;
+                }
+                
+                // Se não for OK (erro do servidor)
+                if (!response.ok) {
+                    messageElement.textContent = `❌ Erro ${response.status}: ${jsonResponse.msg || 'Falha na requisição.'}`;
+                    messageElement.style.color = '#ff4444';
+                    return jsonResponse;
+                }
+            }
+
+
+            // Tratamento para rotas de Autenticação (/signup, /login)
+            const jsonResponse = await response.json(); 
+            
+            if (response.ok) {
+                messageElement.textContent = `✅ ${jsonResponse.msg}`;
+                messageElement.style.color = '#00ff80';
+            } else {
+                messageElement.textContent = `❌ Erro ${response.status}: ${jsonResponse.msg || 'Falha na requisição.'}`;
+                messageElement.style.color = '#ff4444';
+            }
+            return jsonResponse;
+
+        } catch (error) {
+            messageElement.textContent = `❌ Erro de Rede: ${error.message}. Verifique a conexão do servidor.`;
+            messageElement.style.color = '#ff4444';
+            console.error('Fetch Error:', error);
+            return { success: false, msg: 'Erro de rede ou servidor não responde.' };
+        }
+    }
+    
+    // ----------------------------------------------------
+    // EVENTOS DOS BOTÕES DE AUTENTICAÇÃO
+    // ----------------------------------------------------
+
+    // Função para Login (Agora chama o Server)
+    document.getElementById('login-btn').addEventListener('click', async () => {
+        const username = document.getElementById('login-email').value;
         const password = document.getElementById('login-password').value;
         const loginMessage = document.getElementById('login-message');
-        const account = getAccount();
 
-        if (account && 
-            (account.email === emailOrUsername || account.username === emailOrUsername) && 
-            account.password === password) {
-            
-            loginMessage.textContent = '✅ Login bem-sucedido! Redirecionando...';
-            loginMessage.style.color = '#00ff80';
-            
-            // Remove a classe de tela cheia e vai para a Home
+        const data = { username, password };
+        const result = await sendPostRequest('/login', data, loginMessage);
+
+        if (result.success) {
+            // Se o login foi bem-sucedido pelo servidor, salva a sessão local.
+            const account = getAccount() || {};
+            account.username = username; // Salva o username para exibição
+            account.isLoggedIn = true;
+            saveAccount(account);
+
             setTimeout(() => {
-                updateProfileDisplay(); // Atualiza, remove a classe logged-out e mostra o site
                 showScreen('home-screen');
+                showSubScreen('home-cards-view', 'home');
                 loginMessage.textContent = ''; 
                 document.getElementById('login-email').value = '';
                 document.getElementById('login-password').value = '';
             }, 1500);
-            
         } else {
-            loginMessage.textContent = '❌ Credenciais inválidas ou conta não encontrada.';
-            loginMessage.style.color = '#ff4444';
+            // Permanece na tela de login
         }
     });
 
-    // Função para simular a criação de conta
-    document.getElementById('create-account-btn').addEventListener('click', () => {
+    // Função para Criação de Conta (Agora chama o Server)
+    document.getElementById('create-account-btn').addEventListener('click', async () => {
         const username = document.getElementById('new-username').value;
         const email = document.getElementById('new-email').value;
         const password = document.getElementById('new-password').value;
         const fileInput = document.getElementById('new-profile-pic');
         const createMessage = document.getElementById('create-account-message');
 
-        if (!username || !email || !password) {
-            createMessage.textContent = '❌ Por favor, preencha todos os campos.';
+        // A simulação de upload de imagem é mantida localmente, mas a autenticação vai para o servidor
+        const data = { username: email, password, nickname: username }; // Server só precisa de email/senha. O campo 'new-username' é opcional no backend mas mantido no frontend.
+        
+        if (!email || !password) {
+            createMessage.textContent = '❌ Por favor, preencha Email e Senha.';
             createMessage.style.color = '#ff4444';
             return;
         }
 
-        // Simulação de verificação de conta existente
-        if (getAccount()) {
-            createMessage.textContent = '❌ Uma conta já existe localmente. Por favor, faça login.';
-            createMessage.style.color = '#ffaa00';
-            return;
-        }
+        const result = await sendPostRequest('/signup', data, createMessage);
+        
+        if (result.success) {
+            let profilePicture = DEFAULT_AVATAR;
 
-        // Lógica para carregar a imagem (simulada)
-        let profilePicture = DEFAULT_AVATAR;
-        if (fileInput.files.length > 0) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const newAccount = { username, email, password, profilePicture: e.target.result };
-                saveAccount(newAccount);
-                createMessage.textContent = '✅ Conta criada com sucesso! Faça login.';
-                createMessage.style.color = '#00ff80';
-                setTimeout(() => {
-                    // Vai para a tela de login
-                    showSubScreen('login-sub-screen', 'signup');
-                    document.getElementById('login-email').value = email; // Preenche o email
-                    createMessage.textContent = ''; 
-                    document.getElementById('new-username').value = '';
-                    document.getElementById('new-email').value = '';
-                    document.getElementById('new-password').value = '';
-                }, 1500);
-            };
-            reader.readAsDataURL(fileInput.files[0]);
-        } else {
-            const newAccount = { username, email, password, profilePicture };
-            saveAccount(newAccount);
-            createMessage.textContent = '✅ Conta criada com sucesso! Faça login.';
-            createMessage.style.color = '#00ff80';
+            // Simulação de carregar a imagem, apenas para o frontend (local storage)
+            if (fileInput.files.length > 0) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    profilePicture = e.target.result;
+                    // Salva a nova sessão com a foto, mas o login ainda precisa ser feito.
+                    saveAccount({ username: email, isLoggedIn: true, profilePicture }); 
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            }
+
+            // Vai para a tela de login após o cadastro
             setTimeout(() => {
                 showSubScreen('login-sub-screen', 'signup');
-                document.getElementById('login-email').value = email;
-                createMessage.textContent = '';
+                document.getElementById('login-email').value = email; // Preenche o email
+                createMessage.textContent = ''; 
                 document.getElementById('new-username').value = '';
                 document.getElementById('new-email').value = '';
                 document.getElementById('new-password').value = '';
             }, 1500);
         }
+        // Se falhar, a mensagem de erro do servidor é exibida.
     });
 
-    // NOVO: Função para Logout
+    // Função para Busca de Jogo (Agora chama o Server)
+    if (buscarBtn) {
+        buscarBtn.addEventListener('click', async () => {
+            const gameId = gameIdInput.value;
+            const resultado = resultadoDiv;
+
+            if (!gameId) {
+                resultado.textContent = '❌ ID do jogo é obrigatório.';
+                resultado.style.color = '#ff4444';
+                return;
+            }
+
+            const data = { gameId };
+            const result = await sendPostRequest('/buscar', data, resultado);
+
+            // A rota de busca já é tratada dentro de sendPostRequest, o resultado é a mensagem do servidor.
+            if (result.encontrado === false) {
+                 resultado.textContent = `❌ ${result.msg}`;
+                 resultado.style.color = '#ff4444';
+            } else if (typeof result === 'object' && result.msg) {
+                 // Caso o server retorne JSON de erro que não foi pego acima
+                 resultado.textContent = `❌ Erro do Servidor: ${result.msg}`;
+                 resultado.style.color = '#ff4444';
+            } else {
+                 // Em caso de sucesso e download iniciado, a mensagem já foi definida em sendPostRequest
+            }
+        });
+    }
+
+    // NOVO: Função para Logout (Permanece local, apenas para remover a sessão do browser)
     if (logoutBtn) {
         logoutBtn.addEventListener('click', () => {
             if (confirm('Tem certeza que deseja sair da sua conta?')) {
@@ -564,17 +673,18 @@
             }
         });
     }
-
-    // NOVO: Função para Deletar Conta
+    
+    // NOVO: Função para Deletar Conta (Simulação, pois a exclusão real deve ser no servidor)
     if (deleteAccountBtn) {
         deleteAccountBtn.addEventListener('click', () => {
             const confirmation = prompt("ATENÇÃO: Digite 'DELETAR MINHA CONTA' para confirmar a exclusão permanente de todos os seus dados locais. Esta ação é IRREVERSÍVEL!");
             
             if (confirmation === 'DELETAR MINHA CONTA') {
-                removeAccount();
+                removeAccount(); // Remove a sessão local.
+                // Aqui você enviaria um POST para o servidor: sendPostRequest('/delete-account', { username: getAccount().username }, messageElement)
                 showScreen('signup-screen');
                 showSubScreen('signup-cards-view', 'signup');
-                alert('✅ Sua conta foi deletada permanentemente com sucesso.');
+                alert('✅ Sua conta local foi deletada permanentemente com sucesso. (A exclusão real no servidor não foi implementada)');
                 // Limpa os campos de edição
                 if(editUsernameInput) editUsernameInput.value = '';
                 if(editEmailInput) editEmailInput.value = '';
@@ -585,7 +695,7 @@
         });
     }
     
-    // NOVO: Função para salvar o nome de usuário (minimalista)
+    // NOVO: Função para salvar o nome de usuário (Atualiza apenas o display local)
     if (saveUsernameBtn) {
         saveUsernameBtn.addEventListener('click', () => {
             const account = getAccount();
@@ -602,9 +712,13 @@
                 return;
             }
             
-            account.username = newUsername;
+            // Aqui você enviaria um POST para o servidor para alterar o nickname real:
+            // sendPostRequest('/update-username', { newUsername }, personalizeMessage)
+
+            // Atualiza apenas o local storage para exibição no frontend
+            account.username = newUsername; 
             saveAccount(account);
-            personalizeMessage.textContent = '✅ Nome de usuário atualizado!';
+            personalizeMessage.textContent = '✅ Nome de usuário atualizado localmente!';
             personalizeMessage.style.color = '#00ff80';
             editUsernameInput.value = ''; // Limpa o campo
             
@@ -615,7 +729,7 @@
         });
     }
     
-    // NOVO: Função para salvar Email e Senha (refatorado)
+    // NOVO: Função para salvar Email e Senha (Apenas simulação)
     if (saveAccountBtn) {
         saveAccountBtn.addEventListener('click', () => {
             const account = getAccount();
@@ -627,51 +741,35 @@
                 personalizeMessage.style.color = '#ff4444';
                 return;
             }
+            
+            if (!newEmail && !newPassword) {
+                 personalizeMessage.textContent = '⚠️ Nenhum campo de email ou senha foi preenchido para salvar.';
+                personalizeMessage.style.color = '#ffaa00';
+                return;
+            }
 
-            let updated = false;
+            // O código real deve chamar o servidor para estas alterações,
+            // que usaria o 'bcrypt' para re-hashear a senha e atualizar o JSON.
+            // Ex: sendPostRequest('/update-account', { newEmail, newPassword }, personalizeMessage);
+            
+            personalizeMessage.textContent = '✅ Alterações de Email/Senha enviadas para simulação de atualização!';
+            personalizeMessage.style.color = '#00ff80';
+            
+            // Atualiza o placeholder do email localmente (se houver novo email)
             if (newEmail) {
-                // Simples validação de e-mail
-                if (!newEmail.includes('@') || !newEmail.includes('.')) {
-                    personalizeMessage.textContent = '❌ Email inválido. Certifique-se de incluir @ e .';
-                    personalizeMessage.style.color = '#ff4444';
-                    return;
-                }
-                account.email = newEmail;
-                editEmailInput.value = '';
-                updated = true;
+                 editEmailInput.placeholder = `Email atual: ${newEmail}`;
+                 editEmailInput.value = '';
             }
             if (newPassword) {
-                // Simples validação de senha
-                if (newPassword.length < 4) {
-                    personalizeMessage.textContent = '❌ A nova senha deve ter pelo menos 4 caracteres.';
-                    personalizeMessage.style.color = '#ff4444';
-                    return;
-                }
-                account.password = newPassword;
                 editPasswordInput.value = '';
-                updated = true;
-            }
-            
-            if (updated) {
-                saveAccount(account);
-                personalizeMessage.textContent = '✅ Email/Senha atualizados com sucesso!';
-                personalizeMessage.style.color = '#00ff80';
-                 // Atualiza o placeholder do email
-                if (newEmail) {
-                     editEmailInput.placeholder = `Email atual: ${newEmail}`;
-                }
-            } else {
-                personalizeMessage.textContent = '⚠️ Nenhum campo de email ou senha foi preenchido para salvar.';
-                personalizeMessage.style.color = '#ffaa00';
             }
             
             setTimeout(() => { personalizeMessage.textContent = ''; }, 3000);
         });
     }
 
-
     // ----------------------------------------------------
-    // FUNÇÕES DE VISIBILIDADE E NAVEGAÇÃO
+    // FUNÇÕES DE VISIBILIDADE E NAVEGAÇÃO (Mantidas)
     // ----------------------------------------------------
 
     /**
@@ -684,11 +782,18 @@
             userProfileWidget.classList.remove('logged-out');
             mainLayout.classList.remove('logged-out'); 
             if (mainTitle) mainTitle.style.display = 'block';
+            
+            // Esconde o Sign-Up quando logado
+            if (sidebarSignupLink) sidebarSignupLink.style.display = 'none';
+
         } else {
             // ESCONDE O CONTEÚDO (DESLOGADO)
             userProfileWidget.classList.add('logged-out');
             mainLayout.classList.add('logged-out'); 
             if (mainTitle) mainTitle.style.display = 'none';
+            
+            // Mostra o Sign-Up quando deslogado
+            if (sidebarSignupLink) sidebarSignupLink.style.display = 'list-item';
 
             // Certifica-se de que a tela de login/cadastro é a única visível
             showScreen('signup-screen');
@@ -698,7 +803,7 @@
 
     function updateProfileDisplay() {
         const account = getAccount();
-        const isLoggedIn = !!account;
+        const isLoggedIn = !!account && account.isLoggedIn;
         
         const username = isLoggedIn ? account.username : 'Visitante'; 
         const profilePic = isLoggedIn ? account.profilePicture : DEFAULT_AVATAR;
@@ -719,7 +824,7 @@
 
     function showScreen(targetId) {
         // Ignora a navegação se estiver em modo logged-out e o target não for signup ou terms/about
-        const isLoggedIn = !!getAccount();
+        const isLoggedIn = !!getAccount() && getAccount().isLoggedIn;
         if (!isLoggedIn && targetId !== 'signup-screen' && targetId !== 'terms-screen' && targetId !== 'about-screen') {
             showScreen('signup-screen');
             return;
@@ -772,12 +877,15 @@
              if (targetCardView) targetCardView.classList.add('active');
         }
         
-        // NOVO: Limpa a mensagem de feedback e carrega os dados de edição se for a tela de config
+        // Limpa a mensagem de feedback e carrega os dados de edição se for a tela de config
         if (targetId === 'config-sub-screen') {
             const account = getAccount();
-            if(account) {
+            const isLoggedIn = !!account && account.isLoggedIn;
+            
+            if(isLoggedIn) {
                 if(editUsernameInput) editUsernameInput.placeholder = `Nome atual: ${account.username}`;
-                if(editEmailInput) editEmailInput.placeholder = `Email atual: ${account.email}`;
+                // O email não está salvo no local storage, apenas o username (simulando token/session)
+                if(editEmailInput) editEmailInput.placeholder = `Email (não salvo localmente)`; 
             } else {
                  if(editUsernameInput) editUsernameInput.placeholder = 'Nome de Usuário';
                  if(editEmailInput) editEmailInput.placeholder = 'Email';
@@ -788,7 +896,7 @@
     }
 
     // ----------------------------------------------------
-    // EVENT LISTENERS
+    // EVENT LISTENERS (Navegação/UI)
     // ----------------------------------------------------
 
     // Navegação principal
@@ -880,28 +988,34 @@
     // Simulação de Exportação de Dados (JSON)
     document.getElementById('export-data-btn').addEventListener('click', () => {
         const accountData = getAccount();
-        if (!accountData) {
-            alert('Nenhuma conta encontrada para exportar.');
+        const isLoggedIn = !!accountData && accountData.isLoggedIn;
+        
+        if (!isLoggedIn) {
+            alert('Nenhuma conta logada para exportar dados.');
             return;
         }
+        
+        // Exportamos apenas os dados da sessão local, pois os dados reais (senha) estão no servidor
         const dataToExport = {
-            username: accountData.username,
-            email: accountData.email,
-            password: accountData.password,
+            username_display: accountData.username,
+            // A senha real não deve estar no local storage!
+            // password: 'A senha real não é salva no seu navegador (por segurança)', 
+            // email: 'O email deve ser buscado no servidor', 
             hasProfilePicture: accountData.profilePicture !== DEFAULT_AVATAR,
-            exportDate: new Date().toISOString()
+            exportDate: new Date().toISOString(),
+            status: 'Estes são apenas os dados de sessão locais.'
         };
         const jsonString = JSON.stringify(dataToExport, null, 2);
         const blob = new Blob([jsonString], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `manifest_sample_data_${dataToExport.username}.json`;
+        a.download = `manifest_sample_data_${dataToExport.username_display}.json`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
-        alert('✅ Exportação concluída! Verifique sua pasta de downloads.');
+        alert('✅ Exportação concluída! Verifique sua pasta de downloads. (Atenção: A senha real não é exportada por questões de segurança)');
     });
 
     // Código da Lista de IDs (Simulação)
@@ -931,7 +1045,9 @@
     updateProfileDisplay(); // Inicia a página checando o login e controlando a visibilidade
 
     const currentAccount = getAccount();
-    if (!currentAccount) {
+    const isLoggedIn = !!currentAccount && currentAccount.isLoggedIn;
+    
+    if (!isLoggedIn) {
         // Se não estiver logado, garante que a tela de Sign-Up esteja ativa
         showScreen('signup-screen'); 
         showSubScreen('signup-cards-view', 'signup');

@@ -1,0 +1,129 @@
+!DOCTYPE html
+html lang=pt-BR
+head
+    meta charset=UTF-8
+    titleSistema de Login com JSON (POST)title
+    style
+        body { font-family Arial, sans-serif; padding 20px; background-color #f4f4f4; }
+        .container { max-width 450px; margin 20px auto; background #fff; padding 25px; border-radius 8px; box-shadow 0 4px 8px rgba(0,0,0,0.1); }
+        h2 { color #007bff; border-bottom 2px solid #eee; padding-bottom 10px; margin-top 0; }
+        label { display block; margin-bottom 5px; font-weight bold; color #333; }
+        input[type=text], input[type=password] { width 100%; padding 10px; margin-bottom 15px; border 1px solid #ccc; border-radius 4px; box-sizing border-box; }
+        button { background-color #28a745; color white; padding 10px 15px; border none; border-radius 4px; cursor pointer; font-size 16px; margin-right 10px; }
+        buttonhover { background-color #1e7e34; }
+        #response-area { margin-top 20px; padding 15px; border 1px solid #ccc; background-color #e9ecef; border-radius 4px; white-space pre-wrap; word-wrap break-word; }
+        #response-area.success { border-color #28a745; background-color #d4edda; color #155724; }
+        #response-area.error { border-color #dc3545; background-color #f8d7da; color #721c24; }
+    style
+head
+body
+    h1Sistema de Teste - Rotas POST (JSON)h1
+
+    div class=container
+        h21. Cadastro (POST signup)h2
+        form id=signup-form
+            label for=reg-usernameEmail (@gmail.com)label
+            input type=text placeholder=usuario@gmail.com name=username id=reg-username required
+
+            label for=reg-passwordSenhalabel
+            input type=password placeholder=Sua senha name=password id=reg-password required
+
+            button type=submitCadastrarbutton
+        form
+    div
+
+    div class=container
+        h22. Login (POST login)h2
+        form id=login-form
+            label for=log-usernameEmail (@gmail.com)label
+            input type=text placeholder=usuario@gmail.com name=username id=log-username required
+
+            label for=log-passwordSenhalabel
+            input type=password placeholder=Sua senha name=password id=log-password required
+
+            button type=submitFazer Loginbutton
+        form
+    div
+
+    div class=container
+        h23. Buscar Jogo (POST buscar)h2
+        form id=search-form
+            label for=game-idID do Jogo (Ex meujogo)label
+            input type=text placeholder=ID do Jogo name=gameId id=game-id required
+
+            button type=submit style=background-color #007bff;Buscar Jogobutton
+        form
+        p style=font-size small; color #6c757d;
+            O servidor tentará iniciar o download se o arquivo for encontrado (somente para .exe, .zip, etc.).
+        p
+    div
+
+    h3Resposta do Servidorh3
+    div id=response-areaAguardando interação...div
+
+    script
+         Função utilitária para enviar requisições POST
+        async function sendPostRequest(endpoint, formData) {
+            const data = {};
+            formData.forEach((value, key) = (data[key] = value));
+
+            const responseArea = document.getElementById('response-area');
+            responseArea.textContent = 'Enviando requisição...';
+            responseArea.className = '';
+
+            try {
+                const response = await fetch(endpoint, {
+                    method 'POST',
+                    headers {
+                        'Content-Type' 'applicationjson',
+                    },
+                    body JSON.stringify(data),
+                });
+
+                 Se o status for OK (2xx) e não for a rota de download (buscar)
+                if (response.ok && endpoint !== 'buscar') {
+                    const jsonResponse = await response.json();
+                    responseArea.className = 'success';
+                    responseArea.textContent = `STATUS ${response.status} OKnn${JSON.stringify(jsonResponse, null, 2)}`;
+                } else if (response.ok && endpoint === 'buscar') {
+                     Se for a rota buscar e for sucesso (inicia download)
+                    responseArea.className = 'success';
+                    responseArea.textContent = `STATUS ${response.status} OKnnDownload iniciado para o ID do jogo.`;
+                } else {
+                     Lidar com erros (status 4xx ou 5xx)
+                    const jsonError = await response.json();
+                    responseArea.className = 'error';
+                    responseArea.textContent = `STATUS ${response.status} ERROnn${JSON.stringify(jsonError, null, 2)}`;
+                }
+
+            } catch (error) {
+                 Lidar com erros de rede ou de parse (JSON inválido, etc.)
+                responseArea.className = 'error';
+                responseArea.textContent = `ERRO DE REDEFETCHnn${error.message}nnVerifique se o seu servidor está rodando (node server.js) e se os dados estão corretos.`;
+                console.error('Erro na requisição', error);
+            }
+        }
+
+         Listener para o formulário de Cadastro
+        document.getElementById('signup-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            sendPostRequest('signup', formData);
+        });
+
+         Listener para o formulário de Login
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            sendPostRequest('login', formData);
+        });
+        
+         Listener para o formulário de Busca
+        document.getElementById('search-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            sendPostRequest('buscar', formData);
+        });
+    script
+body
+html
