@@ -1,0 +1,430 @@
+[
+    {
+        "id": "730",
+        "name": "Counter-Strike 2"
+    },
+    {
+        "id": "570",
+        "name": "Dota 2"
+    },
+    {
+        "id": "252490",
+        "name": "Rust"
+    },
+    {
+        "id": "578080",
+        "name": "PUBG: BATTLEGROUNDS"
+    },
+    {
+        "id": "1172620",
+        "name": "EA SPORTS FC 24"
+    },
+    {
+        "id": "1938010",
+        "name": "Call of Duty®"
+    },
+    {
+        "id": "1091500",
+        "name": "Cyberpunk 2077"
+    },
+    {
+        "id": "1245620",
+        "name": "ELDEN RING"
+    },
+    {
+        "id": "271590",
+        "name": "Grand Theft Auto V"
+    },
+    {
+        "id": "1172470",
+        "name": "Apex Legends"
+    },
+    {
+        "id": "1085660",
+        "name": "Destiny 2"
+    },
+    {
+        "id": "892970",
+        "name": "Valheim"
+    },
+    {
+        "id": "1290030",
+        "name": "Dead by Daylight"
+    },
+    {
+        "id": "1446780",
+        "name": "Monster Hunter Rise"
+    },
+    {
+        "id": "233470",
+        "name": "Cities: Skylines"
+    },
+    {
+        "id": "440",
+        "name": "Team Fortress 2"
+    },
+    {
+        "id": "292030",
+        "name": "The Witcher 3: Wild Hunt"
+    },
+    {
+        "id": "236850",
+        "name": "War Thunder"
+    },
+    {
+        "id": "386620",
+        "name": "DayZ"
+    },
+    {
+        "id": "377840",
+        "name": "Fallout 4"
+    },
+    {
+        "id": "304930",
+        "name": "Unturned"
+    },
+    {
+        "id": "413150",
+        "name": "Stardew Valley"
+    },
+    {
+        "id": "1063730",
+        "name": "New World"
+    },
+    {
+        "id": "435150",
+        "name": "Divinity: Original Sin 2 - Definitive Edition"
+    },
+    {
+        "id": "1817230",
+        "name": "Marvel’s Spider-Man Remastered"
+    },
+    {
+        "id": "1149460",
+        "name": "Raft"
+    },
+    {
+        "id": "1097150",
+        "name": "Fall Guys"
+    },
+    {
+        "id": "238960",
+        "name": "Path of Exile"
+    },
+    {
+        "id": "221100",
+        "name": "Day of Defeat: Source"
+    },
+    {
+        "id": "1361280",
+        "name": "Yu-Gi-Oh! Master Duel"
+    },
+    {
+        "id": "1374960",
+        "name": "ICARUS"
+    },
+    {
+        "id": "49520",
+        "name": "Borderlands 2"
+    },
+    {
+        "id": "644400",
+        "name": "They Are Billions"
+    },
+    {
+        "id": "611360",
+        "name": "The Elder Scrolls V: Skyrim Special Edition"
+    },
+    {
+        "id": "1490890",
+        "name": "Lost Ark"
+    },
+    {
+        "id": "1675200",
+        "name": "Steam Deck Client"
+    },
+    {
+        "id": "244850",
+        "name": "Assetto Corsa"
+    },
+    {
+        "id": "1343400",
+        "name": "Microsoft Flight Simulator"
+    },
+    {
+        "id": "1659010",
+        "name": "Terraria: Journey's End"
+    },
+    {
+        "id": "8930",
+        "name": "Sid Meier's Civilization V"
+    },
+    {
+        "id": "1621690",
+        "name": "Vampire Survivors"
+    },
+    {
+        "id": "427520",
+        "name": "Factorio"
+    },
+    {
+        "id": "230410",
+        "name": "Warframe"
+    },
+    {
+        "id": "1196420",
+        "name": "Bloons TD 6"
+    },
+    {
+        "id": "1604030",
+        "name": "Deep Rock Galactic"
+    },
+    {
+        "id": "431960",
+        "name": "Wallpaper Engine"
+    },
+    {
+        "id": "322330",
+        "name": "Don't Starve Together"
+    },
+    {
+        "id": "105600",
+        "name": "Terraria"
+    },
+    {
+        "id": "250900",
+        "name": "The Binding of Isaac: Rebirth"
+    },
+    {
+        "id": "1286680",
+        "name": "Train Sim World 3"
+    },
+    {
+        "id": "444090",
+        "name": "Paladins"
+    },
+    {
+        "id": "359550",
+        "name": "Tom Clancy's Rainbow Six Siege"
+    },
+    {
+        "id": "1238860",
+        "name": "F1 22"
+    },
+    {
+        "id": "261570",
+        "name": "Mount & Blade II: Bannerlord"
+    },
+    {
+        "id": "239140",
+        "name": "Dying Light"
+    },
+    {
+        "id": "413080",
+        "name": "The Elder Scrolls Online"
+    },
+    {
+        "id": "489830",
+        "name": "The Elder Scrolls V: Skyrim Special Edition"
+    },
+    {
+        "id": "457140",
+        "name": "Oxygen Not Included"
+    },
+    {
+        "id": "379430",
+        "name": "Slay the Spire"
+    },
+    {
+        "id": "67890",
+        "name": "The Witcher 2: Assassins of Kings Enhanced Edition"
+    },
+    {
+        "id": "1840",
+        "name": "Half-Life 2: Deathmatch"
+    },
+    {
+        "id": "2059340",
+        "name": "Diablo IV"
+    },
+    {
+        "id": "107410",
+        "name": "ARMA 3"
+    },
+    {
+        "id": "1537250",
+        "name": "Grounded"
+    },
+    {
+        "id": "1222730",
+        "name": "Forza Horizon 5"
+    },
+    {
+        "id": "2186250",
+        "name": "PAYDAY 3"
+    },
+    {
+        "id": "1649080",
+        "name": "Dead Island 2"
+    },
+    {
+        "id": "1468870",
+        "name": "Monster Hunter Stories 2: Wings of Ruin"
+    },
+    {
+        "id": "1488200",
+        "name": "EA SPORTS FIFA 23"
+    },
+    {
+        "id": "2007880",
+        "name": "Street Fighter 6"
+    },
+    {
+        "id": "2242660",
+        "name": "Lethal Company"
+    },
+    {
+        "id": "1332010",
+        "name": "Hogwarts Legacy"
+    },
+    {
+        "id": "1313380",
+        "name": "The Sims™ 4"
+    },
+    {
+        "id": "3830",
+        "name": "Final Fantasy XI Online"
+    },
+    {
+        "id": "281990",
+        "name": "Stellaris"
+    },
+    {
+        "id": "1404220",
+        "name": "Red Dead Redemption 2"
+    },
+    {
+        "id": "1118120",
+        "name": "Star Wars Jedi: Survivor"
+    },
+    {
+        "id": "813820",
+        "name": "Sekiro: Shadows Die Twice - GOTY Edition"
+    },
+    {
+        "id": "2338680",
+        "name": "Resident Evil 4"
+    },
+    {
+        "id": "1250440",
+        "name": "Forza Horizon 4"
+    },
+    {
+        "id": "1190460",
+        "name": "Death Stranding Director's Cut"
+    },
+    {
+        "id": "1593590",
+        "name": "God of War"
+    },
+    {
+        "id": "1086940",
+        "name": "Baldur's Gate 3"
+    },
+    {
+        "id": "1092780",
+        "name": "NBA 2K24"
+    },
+    {
+        "id": "1030830",
+        "name": "Horizon Zero Dawn Complete Edition"
+    },
+    {
+        "id": "17390",
+        "name": "Mount & Blade: Warband"
+    },
+    {
+        "id": "1261390",
+        "name": "Disco Elysium - The Final Cut"
+    },
+    {
+        "id": "1540",
+        "name": "Team Fortress Classic"
+    },
+    {
+        "id": "10090",
+        "name": "Team Fortress Classic"
+    },
+    {
+        "id": "310560",
+        "name": "DmC Devil May Cry"
+    },
+    {
+        "id": "2420",
+        "name": "Serious Sam HD: The First Encounter"
+    },
+    {
+        "id": "391220",
+        "name": "Rise of the Tomb Raider"
+    },
+    {
+        "id": "1174180",
+        "name": "Red Dead Online"
+    },
+    {
+        "id": "1172620",
+        "name": "F1 23"
+    },
+    {
+        "id": "1203620",
+        "name": "Football Manager 2024"
+    },
+    {
+        "id": "823950",
+        "name": "Planet Zoo"
+    },
+    {
+        "id": "10490",
+        "name": "Half-Life 2: Episode Two"
+    },
+    {
+        "id": "1046930",
+        "name": "FINAL FANTASY XIV Online"
+    },
+    {
+        "id": "1468670",
+        "name": "The Ascent"
+    },
+    {
+        "id": "107410",
+        "name": "Arma 3"
+    },
+    {
+        "id": "1282100",
+        "name": "Resident Evil Village"
+    },
+    {
+        "id": "1158300",
+        "name": "Crusader Kings III"
+    },
+    {
+        "id": "2138540",
+        "name": "EA SPORTS NHL 24"
+    },
+    {
+        "id": "2242660",
+        "name": "Lethal Company"
+    },
+    {
+        "id": "304930",
+        "name": "Unturned"
+    },
+    {
+        "id": "2399830",
+        "name": "Suicide Squad: Kill the Justice League"
+    },
+    {
+        "id": "250900",
+        "name": "The Binding of Isaac: Rebirth"
+    }
+]
