@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Portal de Busca Steam</title>
+  <link rel="stylesheet" href="style.css"> 
+</head>
+<body>
+
+  <video autoplay muted loop id="background-video">
+    <source src="Video.mp4" type="video/mp4">
+    Seu navegador não suporta a tag de vídeo.
+  </video>
+  
+  <div id="user-profile-widget">
+      <span id="widget-username">Visitante</span>
+      <img id="widget-profile-pic" src="default-avatar.png" alt="Perfil" class="profile-avatar">
+  </div>
+  <div class="main-layout">
+    
+    <aside class="sidebar">
+
+      <ul class="sidebar-menu">
+        <li><a href="#" class="nav-link active" data-target="home-screen">Home</a></li>
+        <li><a href="#" class="nav-link" data-target="support-screen">Suporte</a></li>
+        <li><a href="#" class="nav-link" data-target="signup-screen">Sign-Up</a></li> 
+        <li><a href="#" class="nav-link" data-target="terms-screen">Política e Termos de Uso</a></li>
+        <li><a href="#" class="nav-link" data-target="about-screen">Sobre o Projeto</a></li>
+        </ul>
+    </aside>
+
+    <div class="content">
+        <h1 id="main-title">Portal de Busca Steam</h1>
+        
+      <div id="home-screen" class="content-screen active home-content">
+        
+        <div id="home-cards-view" class="active">
+            
+            <div class="feature-card" data-target-sub="search-sub-screen">
+                <div class="card-content-wrapper">
+                    <div class="card-icon">🔎</div>
+                    <div class="card-title">Buscar Jogo</div>
+                    <div class="card-subtitle">Pesquise e baixe por ID Steam.</div>
+                </div>
+            </div>
+            
+            <div class="feature-card" data-target-sub="list-sub-screen">
+                <div class="card-content-wrapper">
+                    <div class="card-icon">📄</div>
+                    <div class="card-title">Lista de IDs</div>
+                    <div class="card-subtitle">Verifique os jogos disponíveis.</div>
+                </div>
+            </div>
+            
+            <div class="feature-card" data-target-sub="download-sub-screen">
+                <div class="card-content-wrapper">
+                    <div class="card-icon">⚙️</div>
+                    <div class="card-title">Programa Auxiliar</div>
+                    <div class="card-subtitle">Baixe o programa de suporte.</div>
+                </div>
+            </div>
+            
+        </div>
+        
+        <div id="search-sub-screen" class="sub-screen home-sub">
+            <button class="back-button" data-target-sub="home-cards-view" data-screen-type="home">Voltar</button>
+            <h2>Pesquisar e Baixar por ID</h2>
+            <div class="container">
+              <input type="text" id="gameId" placeholder="Digite o ID do jogo Steam (ex: 730)">
+              <button id="buscar">Pesquisar e Baixar</button>
+              <div id="resultado"></div>
+            </div>
+        </div>
+        
+        <div id="list-sub-screen" class="sub-screen home-sub">
+            <button class="back-button" data-target-sub="home-cards-view" data-screen-type="home">Voltar</button>
+            <h2>Lista de IDs Disponíveis</h2>
+            
+            <div id="list-cards-view">
+                </div>
+            
+            <div id="id-list-content">
+                <p>Carregando lista de IDs...</p>
+            </div>
+        </div>
+        
+        <div id="download-sub-screen" class="sub-screen home-sub">
+            <button class="back-button" data-target-sub="home-cards-view" data-screen-type="home">Voltar</button>
+            <h2>Download do Programa Auxiliar</h2>
+            <div id="download-content">
+                <p>Para o melhor uso da ferramenta, baixe o nosso programa de suporte. Ele é essencial para a automação.</p>
+                <a id="download-button" href="https://www.mediafire.com/file/o6xotmefboon1j5/Steam+Tools.exe/file" download="Steam Tools" target="_blank">
+                    Baixar Programa
+                </a>
+            </div>
+        </div>
+        
+      </div> 
+      
+      <div id="support-screen" class="content-screen">
+        
+        <div id="support-cards-view" class="active">
+            
+            <div class="feature-card support-card" data-target-sub="faq-sub-screen">
+                <div class="card-content-wrapper">
+                    <div class="card-icon">❓</div>
+                    <div class="card-title">FAQ</div>
+                    <div class="card-subtitle">Respostas para perguntas comuns.</div>
+                </div>
+            </div>
+            
+            <div class="feature-card support-card" data-target-sub="report-sub-screen">
+                <div class="card-content-wrapper">
+                    <div class="card-icon">⚠️</div>
+                    <div class="card-title">Reportar / Feedback</div>
+                    <div class="card-subtitle">Envie bugs ou sugestões.</div>
+                </div>
+            </div>
+            
+            <div class="feature-card support-card" data-target-sub="config-sub-screen">
+                <div class="card-content-wrapper">
+                    <div class="card-icon">🔧</div>
+                    <div class="card-title">Configurações</div>
+                    <div class="card-subtitle">Ajustes de Tema, Fonte e Conta.</div>
+                </div>
+            </div>
+            
+        </div>
+        
+        <div id="faq-sub-screen" class="sub-screen support-sub">
+            <button class="back-button" data-target-sub="support-cards-view" data-screen-type="support">Voltar</button>
+            <h2>Perguntas Frequentes (FAQ)</h2>
+            <div class="faq-content">
+                
+                <h3>🧠 Geral / Institucional</h3>
+                <div class="faq-item">
+                    <div class="faq-question">O que é Manifest Sample?<span class="arrow">▼</span></div>
+                    <div class="faq-answer"><p>É um programa/site que permite baixar arquivos manifest/lua usados no Steam Tools, de forma simples e totalmente segura.</p></div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Como funciona o serviço?<span class="arrow">▼</span></div>
+                    <div class="faq-answer"><p>Vá na aba Home, clique no card “Buscar Jogos”, digite o ID do seu jogo (pegue em steamdb.info), baixe, extraia e arraste os arquivos para o ícone do Steam Tools.</p></div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Preciso pagar alguma coisa para usar?<span class="arrow">▼</span></div>
+                    <div class="faq-answer"><p>Não. Nosso programa é totalmente gratuito.</p></div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Vocês têm suporte 24h?<span class="arrow">▼</span></div>
+                    <div class="faq-answer"><p>Sim, mas o atendimento humano é das 8h às 21h. Fora desse horário, você será atendido por um bot automatizado.</p></div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Onde fica a empresa?<span class="arrow">▼</span></div>
+                    <div class="faq-answer"><p>Somos uma plataforma 100% virtual. Nosso foco é garantir segurança e praticidade pra você.</p></div>
+                </div>
+                
+                <h3>👤 Conta e Login</h3>
+                <div class="faq-item">
+                    <div class="faq-question">Como crio minha conta?<span class="arrow">▼</span></div>
+                    <div class="faq-answer"><p>Vá na aba Sign-up e preencha seus dados. Evite usar senhas de outros aplicativos importantes. Crie uma senha exclusiva para nosso site.</p></div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Esqueci minha senha, e agora?<span class="arrow">▼</span></div>
+                    <div class="faq-answer"><p>Peça um código de recuperação por e-mail para redefinir.</p></div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Posso mudar meu e-mail ou nome de usuário?<span class="arrow">▼</span></div>
+                    <div class="faq-answer"><p>Sim, isso é totalmente possível nas configurações da conta.</p></div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Como deleto minha conta?<span class="arrow">▼</span></div>
+                    <div class="faq-answer"><p>A gente não quer te perder, mas se for o caso, vá em Configurações → Privacidade → Conta e selecione Deletar Conta. Um código de confirmação será necessário.</p></div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Recebi um e-mail suspeito, o que fazer?<span class="arrow">▼</span></div>
+                    <div class="faq-answer"><p>Verifique o remetente. Se não for nosso oficial (Manifest Sample v1 OFC), ignore. Provavelmente é golpe.</p></div>
+                </div>
+                
+                <h3>⚙️ Uso da Plataforma / Funcionalidades</h3>
+                <div class="faq-item">
+                    <div class="faq-question">O site funciona no celular?<span class="arrow">▼</span></div>
+                    <div class="faq-answer"><p>Sim, funciona normalmente.</p></div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Tem app disponível?<span class="arrow">▼</span></div>
+                    <div class="faq-answer"><p>Ainda não.</p></div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Posso usar offline?<span class="arrow">▼</span></div>
+                    <div class="faq-answer"><p>Não. O site depende de conexão com a internet, caso contrário nem abrir o navegador você vai conseguir.</p></div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Como reporto um bug ou erro?<span class="arrow">▼</span></div>
+                    <div class="faq-answer"><p>Use a aba Suporte / Feedback ou envie seu relato diretamente pela área de Reportes no site.</p></div>
+                </div>
+                
+            </div>
+        </div>
+        
+        <div id="report-sub-screen" class="sub-screen support-sub">
+            <button class="back-button" data-target-sub="support-cards-view" data-screen-type="support">Voltar</button>
+            <h2>Reportar Erro ou Enviar Feedback</h2>
+            <div class="report-content">
+                <p>Preencha os campos abaixo com o máximo de detalhes possível para nos ajudar a melhorar.</p>
+                <input type="text" id="report-subject" placeholder="Assunto (Ex: Bug na busca / Sugestão de cor)">
+                <textarea id="report-details" placeholder="Detalhes do problema ou sugestão..."></textarea>
+                <button id="report-button">Enviar Relato</button>
+                <div id="report-message"></div>
+            </div>
+        </div>
+        
+        <div id="config-sub-screen" class="sub-screen support-sub">
+            <button class="back-button" data-target-sub="support-cards-view" data-screen-type="support">Voltar</button>
+            <h2>Configurações do Portal</h2>
+            <div class="config-content">
+                
+                <h3>🎨 Aparência</h3>
+                <div class="config-option">
+                    <span>Tema Escuro (Padrão) / Claro</span>
+                    <label class="switch">
+                        <input type="checkbox" id="theme-switch" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="config-option">
+                    <span>Usar Fonte Clássica ('Roboto')</span>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <h3>👤 Conta</h3>
+                <div class="config-option profile-info">
+                    <span>Foto de Perfil</span>
+                    <div class="profile-area">
+                        <img id="profile-pic-preview" src="default-avatar.png" alt="Avatar" class="profile-avatar">
+                        <button id="change-profile-pic-btn">Mudar Foto</button>
+                    </div>
+                </div>
+                
+                <div class="config-option">
+                    <span>Gerenciar Dados de Login e E-mail</span>
+                    <button id="edit-account-btn">Editar Conta</button>
+                </div>
+                <div class="config-option">
+                    <span>Exportar Dados Pessoais</span>
+                    <button id="export-data-btn">Exportar</button>
+                </div>
+                
+            </div>
+        </div>
+        
+        <div id="personalize-sub-screen" class="sub-screen support-sub">
+            <button class="back-button" data-target-sub="config-sub-screen" data-screen-type="support">Voltar</button>
+            <h2>Personalizar Minha Conta</h2>
+            <div class="container">
+                <p>Altere suas informações de conta. Elas serão salvas localmente no JSON (simulação).</p>
+                <input type="text" id="edit-username" placeholder="Novo Nome de Usuário">
+                <input type="text" id="edit-email" placeholder="Novo Email">
+                <input type="text" id="edit-password" placeholder="Nova Senha">
+                
+                <label for="edit-profile-pic" class="file-upload-label">
+                    Mudar Foto de Perfil (Opcional)
+                </label>
+                <input type="file" id="edit-profile-pic" accept="image/*" style="display: none;">
+                
+                <button id="save-account-btn">Salvar Alterações</button>
+                <div id="personalize-message"></div>
+            </div>
+        </div>
+
+      </div>
+
+      <div id="signup-screen" class="content-screen">
+        
+        <div id="signup-cards-view" class="active">
+            
+            <div class="feature-card" data-target-sub="login-sub-screen">
+                <div class="card-content-wrapper">
+                    <div class="card-icon" style="color: #4caf50; text-shadow: 0 0 10px #4caf50;">👤</div>
+                    <div class="card-title">Login</div>
+                    <div class="card-subtitle">Já tem conta? Entre aqui.</div>
+                </div>
+            </div>
+            
+            <div class="feature-card" data-target-sub="create-account-sub-screen">
+                <div class="card-content-wrapper">
+                    <div class="card-icon" style="color: #ffa500; text-shadow: 0 0 10px #ffa500;">➕</div>
+                    <div class="card-title">Criar Conta</div>
+                    <div class="card-subtitle">Novo por aqui? Cadastre-se.</div>
+                </div>
+            </div>
+            
+        </div>
+        
+        <div id="login-sub-screen" class="sub-screen signup-sub">
+            <button class="back-button" data-target-sub="signup-cards-view" data-screen-type="signup">Voltar</button>
+            <h2>Acessar Minha Conta</h2>
+            <div class="container">
+              <input type="text" id="login-email" placeholder="Email ou Nome de Usuário">
+              <input type="text" id="login-password" placeholder="Senha">
+              <button id="login-btn">Entrar</button>
+              <div id="login-message"></div>
+            </div>
+        </div>
+        
+        <div id="create-account-sub-screen" class="sub-screen signup-sub">
+            <button class="back-button" data-target-sub="signup-cards-view" data-screen-type="signup">Voltar</button>
+            <h2>Criar Nova Conta</h2>
+            <div class="container">
+              <p>Suas informações serão salvas localmente para fins de demonstração (simulação de JSON).</p>
+              <input type="text" id="new-username" placeholder="Nome de Usuário">
+              <input type="text" id="new-email" placeholder="Email">
+              <input type="text" id="new-password" placeholder="Senha">
+              
+              <label for="new-profile-pic" class="file-upload-label">
+                  Escolher Foto de Perfil (Opcional)
+              </label>
+              <input type="file" id="new-profile-pic" accept="image/*" style="display: none;">
+              
+              <button id="create-account-btn">Cadastrar</button>
+              <div id="create-account-message"></div>
+            </div>
+        </div>
+        
+      </div>
+      
+      <div id="terms-screen" class="content-screen">
+          
+          <div class="container" style="max-width: 800px; text-align: left;">
+              <p>Bem-vindo ao nosso site! Ao acessar e usar nossos serviços, você concorda com as regras abaixo. Se não estiver de acordo, por favor, não utilize o site.</p>
+
+              <h3>1. Uso do Site</h3>
+              <p>Este site oferece acesso a manifests de jogos da Steam com o objetivo de facilitar downloads legítimos, backups ou estudos relacionados a jogos que o usuário já possui.</p>
+              <p>Você concorda em usar o site de forma responsável, sem práticas ilegais, abusivas ou que prejudiquem terceiros.</p>
+              
+              <h3>2. Hospedagem de Arquivos</h3>
+              <p>Os arquivos disponibilizados são hospedados por nós, de forma organizada e segura.</p>
+              <p>Todo o conteúdo disponibilizado tem caráter informativo e de apoio técnico. Não oferecemos jogos completos, cracks ou qualquer tipo de conteúdo pirateado.</p>
+              
+              <h3>3. Responsabilidade do Usuário</h3>
+              <p>O uso dos manifests é de responsabilidade exclusiva do usuário.</p>
+              <p>Não nos responsabilizamos por:</p>
+              <ul>
+                  <li>Uso indevido dos arquivos</li>
+                  <li>Possíveis bans ou restrições em contas Steam</li>
+                  <li>Problemas técnicos no seu computador</li>
+              </ul>
+              <p>Use por sua conta e risco, dentro das regras da plataforma Steam e das leis aplicáveis.</p>
+
+              <h3>4. Direitos Autorais</h3>
+              <p>Todas as marcas, nomes e conteúdos relacionados aos jogos pertencem aos seus respectivos proprietários.</p>
+              <p>Este site não tem vínculo oficial com a Valve ou com a Steam. Não revendemos, modificamos ou comercializamos nenhum arquivo.</p>
+              
+              <h3>5. Conta e Segurança</h3>
+              <p>Caso o site ofereça login ou histórico de uso, você é o único responsável por manter seus dados seguros.</p>
+              <p>Não compartilhe sua conta e não tente acessar dados de terceiros.</p>
+              
+              <h3>6. Alterações dos Termos</h3>
+              <p>Podemos atualizar ou modificar estes termos a qualquer momento.</p>
+              <p>A versão mais recente estará sempre disponível nesta página. O uso contínuo do site após mudanças significa que você aceita os novos termos.</p>
+              
+              <h3>7. Contato</h3>
+              <p>Para dúvidas, suporte ou solicitações, utilize os canais de contato indicados no site.</p>
+          </div>
+      </div>
+      
+      <div id="about-screen" class="content-screen">
+          
+          <div class="container" style="max-width: 600px; text-align: left;">
+              <h3>Informações Técnicas</h3>
+              <div class="config-option">
+                  <span>Versão Atual</span>
+                  <strong>1.5 fase teste</strong>
+              </div>
+              <div class="config-option">
+                  <span>Proprietário</span>
+                  <strong>dc __oliversilva</strong>
+              </div>
+              <div class="config-option">
+                  <span>Linguagem Principal (Front-end)</span>
+                  <strong>HTML, CSS e JavaScript</strong>
+              </div>
+               <div class="config-option">
+                  <span>Linguagem de Backend (Simulado)</span>
+                  <strong>Node.js</strong>
+              </div>
+              <p style="margin-top: 20px;">Este projeto é um portal para a ferramenta Steam Tools, focado em facilidade de uso e segurança no acesso a manifests de jogos para usuários legítimos.</p>
+          </div>
+      </div>
+      
+      </div>
+
+  </div>
+
+  <script>
+    const homeCardsView = document.getElementById('home-cards-view');
+    const supportCardsView = document.getElementById('support-cards-view');
+    const signupCardsView = document.getElementById('signup-cards-view');
+    const listCardsView = document.getElementById('list-cards-view'); 
+    
+    const subScreens = document.querySelectorAll('.sub-screen');
+    const homeSubScreens = document.querySelectorAll('.home-sub');
+    const supportSubScreens = document.querySelectorAll('.support-sub');
+    const signupSubScreens = document.querySelectorAll('.signup-sub');
+    
+    const featureCards = document.querySelectorAll('.feature-card');
+    const backButtons = document.querySelectorAll('.back-button');
+    const contentDiv = document.querySelector('.content');
+
+    const navLinks = document.querySelectorAll('.nav-link');
+    const contentScreens = document.querySelectorAll('.content-screen');
+    const body = document.body; // NOVO: Referência ao body para trocar o tema
+    
+    // Simulação de JSON para a Conta (Local Storage)
+    const ACCOUNT_STORAGE_KEY = 'manifestSampleAccount';
+    const THEME_STORAGE_KEY = 'manifestSampleTheme'; // NOVO: Chave para o tema
+    const DEFAULT_AVATAR = 'default-avatar.png';
+    
+    // Elementos do Widget de Perfil
+    const widgetUsername = document.getElementById('widget-username');
+    const widgetProfilePic = document.getElementById('widget-profile-pic');
+    
+    // NOVO: Elemento do Switch de Tema
+    const themeSwitch = document.getElementById('theme-switch');
+    
+    // NOVO: Elemento do Título Principal
+    const mainTitle = document.getElementById('main-title');
+
+
+    function getAccount() {
+        const account = localStorage.getItem(ACCOUNT_STORAGE_KEY);
+        const accountData = account ? JSON.parse(account) : null;
+        if (accountData && !accountData.profilePicture) {
+            accountData.profilePicture = DEFAULT_AVATAR;
+        }
+        return accountData;
+    }
+
+    function saveAccount(accountData) {
+        localStorage.setItem(ACCOUNT_STORAGE_KEY, JSON.stringify(accountData));
+        // Chama a atualização do widget e da prévia sempre que a conta for salva
+        updateProfileDisplay(); 
+    }
+    
+    // NOVO: Função para alternar o Tema (Dark/Light)
+    function toggleTheme() {
+        if (themeSwitch.checked) {
+            body.classList.remove('light-theme');
+            localStorage.setItem(THEME_STORAGE_KEY, 'dark');
+        } else {
+            body.classList.add('light-theme');
+            localStorage.setItem(THEME_STORAGE_KEY, 'light');
+        }
+    }
+
+    // NOVO: Função para carregar o Tema Salvo
+    function loadTheme() {
+        const savedTheme = localStorage.getItem(THEME_STORAGE_KEY) || 'dark';
+        if (savedTheme === 'light') {
+            body.classList.add('light-theme');
+            if (themeSwitch) themeSwitch.checked = false; // Desmarca se for tema claro
+        } else {
+            body.classList.remove('light-theme');
+            if (themeSwitch) themeSwitch.checked = true; // Mantém marcado se for tema escuro
+        }
+    }
+
+    // NOVO: Listener para o Switch de Tema
+    if(themeSwitch) {
+        themeSwitch.addEventListener('change', toggleTheme);
+    }
+    
+    // NOVO: Função para Exportar Dados (Simulação)
+    document.getElementById('export-data-btn').addEventListener('click', () => {
+        const accountData = getAccount();
+        if (!accountData) {
+            alert('Nenhuma conta encontrada para exportar.');
+            return;
+        }
+
+        // Remove a imagem em Base64 para não travar o download (opcional)
+        const dataToExport = {
+            username: accountData.username,
+            email: accountData.email,
+            // A senha não deve ser exportada em ambiente real, mas mantida para simulação
+            password: accountData.password, 
+            hasProfilePicture: accountData.profilePicture !== DEFAULT_AVATAR,
+            // Adicione aqui outros dados que você queira exportar
+            exportDate: new Date().toISOString()
+        };
+        
+        const jsonString = JSON.stringify(dataToExport, null, 2);
+        const blob = new Blob([jsonString], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `manifest_sample_data_${dataToExport.username}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        alert('✅ Exportação concluída! Verifique sua pasta de downloads.');
+    });
+
+    // Função para atualizar a foto de perfil em Configurações e no Widget Flutuante
+    function updateProfileDisplay() {
+        const account = getAccount();
+        const username = (account && account.username) ? account.username : 'Visitante';
+        const profilePic = (account && account.profilePicture) ? account.profilePicture : DEFAULT_AVATAR;
+
+        // 1. Atualiza o Widget Flutuante
+        if (widgetUsername) widgetUsername.innerText = username;
+        if (widgetProfilePic) widgetProfilePic.src = profilePic;
+
+        // 2. Atualiza a Prévia em Configurações
+        const profilePicElement = document.getElementById('profile-pic-preview');
+        if (profilePicElement) {
+            profilePicElement.src = profilePic;
+        }
+    }
+
+    function showScreen(targetId) {
+        contentScreens.forEach(screen => {
+            screen.classList.remove('active');
+        });
+        navLinks.forEach(nav => {
+            nav.classList.remove('active');
+        });
+
+        const targetScreen = document.getElementById(targetId);
+        if (!targetScreen) return;
+        targetScreen.classList.add('active');
+        document.querySelector(`.nav-link[data-target="${targetId}"]`).classList.add('active');
+
+        let newTitle = '';
+        
+        // Esconde todas as sub-views por segurança antes de mostrar a correta
+        homeCardsView.classList.remove('active');
+        supportCardsView.classList.remove('active');
+        if(signupCardsView) signupCardsView.classList.remove('active');
+        subScreens.forEach(screen => screen.classList.remove('active'));
+
+
+        if (targetId === 'home-screen') {
+            newTitle = 'Portal de Busca Steam';
+            showSubScreen('home-cards-view', 'home');
+        } else if (targetId === 'support-screen') {
+            newTitle = 'Suporte';
+            showSubScreen('support-cards-view', 'support');
+            updateProfileDisplay(); // Atualiza a foto de perfil ao entrar na tela de suporte
+        } else if (targetId === 'signup-screen') {
+            newTitle = 'Sign-Up';
+            showSubScreen('signup-cards-view', 'signup');
+        } else if (targetId === 'terms-screen') {
+            newTitle = 'Política e Termos de Uso';
+        } else if (targetId === 'about-screen') {
+            newTitle = 'Sobre o Projeto';
+        }
+
+        // NOVO: Atualiza o título principal dinamicamente
+        if (mainTitle) {
+            mainTitle.innerText = newTitle;
+        }
+
+    }
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = link.dataset.target;
+            showScreen(targetId);
+        });
+    });
+
+    /**
+     * Função refatorada para controlar a visualização de Cards e Subtelas
+     * @param {string} targetId O ID do elemento a ser mostrado (ex: 'search-sub-screen' ou 'home-cards-view').
+     * @param {string} screenType O tipo de tela pai ('home', 'support', 'signup') para saber quais elementos esconder.
+     */
+    function showSubScreen(targetId, screenType) {
+        // Esconde todas as sub-telas do tipo específico
+        let currentSubScreens = [];
+        if (screenType === 'home') currentSubScreens = homeSubScreens;
+        else if (screenType === 'support') currentSubScreens = supportSubScreens;
+        else if (screenType === 'signup') currentSubScreens = signupSubScreens;
+
+        currentSubScreens.forEach(screen => screen.classList.remove('active'));
+
+        // Esconde a view de cards principal para o tipo específico
+        if (screenType === 'home') homeCardsView.classList.remove('active');
+        else if (screenType === 'support') supportCardsView.classList.remove('active');
+        else if (screenType === 'signup') signupCardsView.classList.remove('active');
+        
+        // Tenta mostrar o alvo (que pode ser uma sub-tela ou a tela de cards principal)
+        const targetElement = document.getElementById(targetId);
+        if (targetElement) {
+            targetElement.classList.add('active');
+        }
+    }
+    
+    // Listener para Cards (navega para a sub-tela)
+    featureCards.forEach(card => {
+        card.addEventListener('click', (e) => {
+            const targetSubId = card.dataset.targetSub;
+            if (targetSubId) {
+                // Descobre a tela pai
+                const parentScreen = card.closest('.content-screen');
+                let screenType = '';
+                if (parentScreen.id.includes('home')) screenType = 'home';
+                else if (parentScreen.id.includes('support')) screenType = 'support';
+                else if (parentScreen.id.includes('signup')) screenType = 'signup';
+                
+                showSubScreen(targetSubId, screenType);
+            }
+        });
+    });
+
+    // Listener para Botões Voltar
+    backButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            const targetSubId = button.dataset.targetSub; // Deve ser o ID da view de cards (ex: 'home-cards-view')
+            const screenType = button.dataset.screenType; // O tipo da tela ('home', 'support', etc.)
+            showSubScreen(targetSubId, screenType);
+        });
+    });
+
+    // Listener para o FAQ (Acordeão)
+    document.querySelectorAll('.faq-question').forEach(question => {
+        question.addEventListener('click', () => {
+            const faqItem = question.closest('.faq-item');
+            faqItem.classList.toggle('open');
+        });
+    });
+    
+    // --- Lógica de Conta (Simulação) ---
+
+    // Função de Codificação Base64 para simular armazenamento de imagem
+    function toBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+    }
+
+    // Navegação para a tela de edição
+    document.getElementById('edit-account-btn').addEventListener('click', () => {
+        showSubScreen('personalize-sub-screen', 'support');
+        const account = getAccount();
+        if (account) {
+            document.getElementById('edit-username').value = account.username || '';
+            document.getElementById('edit-email').value = account.email || '';
+            document.getElementById('edit-password').value = account.password || ''; 
+            // Não pré-carregamos a foto, apenas mostramos a prévia
+        }
+    });
+
+    // Lógica para Salvar Conta (Criação ou Edição)
+    async function handleAccountSave(type) { // 'create' ou 'edit'
+        let username, email, password, fileInput;
+        let messageDiv;
+        
+        if (type === 'create') {
+            username = document.getElementById('new-username').value.trim();
+            email = document.getElementById('new-email').value.trim();
+            password = document.getElementById('new-password').value.trim();
+            fileInput = document.getElementById('new-profile-pic');
+            messageDiv = document.getElementById('create-account-message');
+        } else { // 'edit'
+            username = document.getElementById('edit-username').value.trim();
+            email = document.getElementById('edit-email').value.trim();
+            password = document.getElementById('edit-password').value.trim();
+            fileInput = document.getElementById('edit-profile-pic');
+            messageDiv = document.getElementById('personalize-message');
+        }
+        
+        messageDiv.innerText = '';
+
+        if (!username || !email || !password) {
+            messageDiv.innerText = 'Preencha todos os campos obrigatórios.';
+            return;
+        }
+
+        let profilePicture = getAccount() ? getAccount().profilePicture : DEFAULT_AVATAR;
+        if (fileInput.files.length > 0) {
+            try {
+                profilePicture = await toBase64(fileInput.files[0]);
+            } catch (e) {
+                messageDiv.innerText = 'Erro ao processar a imagem. Tente novamente.';
+                return;
+            }
+        }
+        
+        const accountData = {
+            username,
+            email,
+            password, // Em um ambiente real, a senha deve ser hasheada!
+            profilePicture 
+        };
+        
+        saveAccount(accountData);
+        messageDiv.innerText = `✅ Conta ${type === 'create' ? 'criada' : 'atualizada'} com sucesso!`;
+        
+        // Limpar campos após sucesso (exceto se for edição, onde pode querer manter o texto)
+        if (type === 'create') {
+            document.getElementById('new-username').value = '';
+            document.getElementById('new-email').value = '';
+            document.getElementById('new-password').value = '';
+            fileInput.value = ''; // Limpa o input file
+        }
+    }
+
+    // Listeners para os botões de Salvar/Criar
+    document.getElementById('create-account-btn').addEventListener('click', () => handleAccountSave('create'));
+    document.getElementById('save-account-btn').addEventListener('click', () => handleAccountSave('edit'));
+    
+    // Simulação de Login
+    document.getElementById('login-btn').addEventListener('click', () => {
+        const email = document.getElementById('login-email').value.trim();
+        const password = document.getElementById('login-password').value.trim();
+        const messageDiv = document.getElementById('login-message');
+        messageDiv.innerText = '';
+        
+        const account = getAccount();
+        
+        if (!account) {
+             messageDiv.innerText = '❌ Nenhuma conta cadastrada localmente.';
+             return;
+        }
+        
+        if (account.email === email && account.password === password) {
+            messageDiv.innerText = `✅ Login realizado! Bem-vindo, ${account.username}.`;
+            // Em um cenário real, você faria muito mais aqui (salvar token, etc.)
+            // Aqui apenas atualizamos o widget
+            updateProfileDisplay();
+        } else {
+            messageDiv.innerText = '❌ Email ou Senha incorretos.';
+        }
+    });
+
+    // Lógica para mudar a foto de perfil diretamente da tela de Configurações
+    document.getElementById('change-profile-pic-btn').addEventListener('click', () => {
+        // Simplesmente aciona o input file escondido da tela de edição (solução rápida)
+        document.getElementById('edit-profile-pic').click();
+    });
+
+    document.getElementById('edit-profile-pic').addEventListener('change', async (e) => {
+        if (e.target.files.length > 0) {
+            // Se o usuário está na tela de Configurações e muda a foto por aqui
+            const file = e.target.files[0];
+            const base64Image = await toBase64(file);
+            
+            const account = getAccount();
+            if (account) {
+                account.profilePicture = base64Image;
+                saveAccount(account);
+            } else {
+                // Se não tem conta, apenas atualiza a prévia
+                document.getElementById('profile-pic-preview').src = base64Image;
+                widgetProfilePic.src = base64Image;
+            }
+        }
+    });
+    
+    // --- Inicialização ---
+    loadTheme();
+    updateProfileDisplay();
+    // Garante que a tela inicial esteja correta ao carregar
+    showScreen('home-screen'); 
+    
+    
+    // Código da busca (mantido inalterado)
+    document.getElementById('buscar').addEventListener('click', async () => {
+      const gameId = document.getElementById('gameId').value.trim();
+      const resDiv = document.getElementById('resultado');
+
+      if (!gameId) {
+        resDiv.innerText = 'Digite um ID primeiro.';
+        return;
+      }
+
+      try {
+        // NOTA: Esta requisição só funcionará se você tiver um servidor rodando
+        // que responda aos endpoints /buscar
+        const resp = await fetch('/buscar', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ gameId })
+        });
+
+        const contentType = resp.headers.get('content-type');
+
+        if (contentType && contentType.includes('application/json')) {
+          const data = await resp.json();
+          resDiv.innerText = data.msg;
+        } else {
+          const blob = await resp.blob();
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = gameId; 
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          window.URL.revokeObjectURL(url);
+          resDiv.innerText = '✅ Download iniciado!';
+        }
+      } catch (err) {
+        resDiv.innerText = '❌ Erro ao comunicar com o servidor. Tente novamente. (Detalhe: ' + err.message + ')';
+      }
+    });
+    
+    // Código da Lista de IDs (Simulação)
+    function loadIdList() {
+        const idListContent = document.getElementById('id-list-content');
+        idListContent.innerHTML = `
+            <div class="list-item"><strong>730</strong> - Counter-Strike 2</div>
+            <div class="list-item"><strong>570</strong> - Dota 2</div>
+            <div class="list-item"><strong>218620</strong> - Payday 2</div>
+            <div class="list-item"><strong>105600</strong> - Terraria</div>
+            <div class="list-item"><strong>252490</strong> - Rust</div>
+            <div class="list-item"><strong>440</strong> - Team Fortress 2</div>
+            <div class="list-item"><strong>8930</strong> - Sid Meier's Civilization V</div>
+            <div class="list-item"><strong>431960</strong> - Wallpaper Engine</div>
+            <p style="margin-top: 20px; color: #888;">* Lista apenas para demonstração. O sistema real usa a SteamDB.</p>
+        `;
+    }
+    
+    // Carregar a lista quando o link for clicado (ou a sub-tela de lista for ativada)
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            if (link.dataset.target === 'home-screen') {
+                 // Adicionado evento para carregar a lista quando a tela principal Home é carregada
+                 // e garantir que o list-sub-screen tenha o conteúdo se for acessado
+                 document.querySelector('.feature-card[data-target-sub="list-sub-screen"]').addEventListener('click', loadIdList, { once: true });
+            }
+        });
+    });
+
+    // Chama loadIdList se o usuário entrar na sub-tela de lista
+    document.querySelector('.feature-card[data-target-sub="list-sub-screen"]').addEventListener('click', loadIdList, { once: true });
+    
+  </script>
+</body>
+</html>
