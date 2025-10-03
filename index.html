@@ -16,7 +16,8 @@
       <span id="widget-username">Visitante</span>
       <img id="widget-profile-pic" src="default-avatar.png" alt="Perfil" class="profile-avatar">
   </div>
-  <div class="main-layout">
+  
+  <div class="main-layout logged-out"> 
     
     <aside class="sidebar">
 
@@ -382,7 +383,7 @@
                   <span>Linguagem Principal (Front-end)</span>
                   <strong>HTML, CSS e JavaScript</strong>
               </div>
-               <div class="config-option">
+              <div class="config-option">
                   <span>Linguagem de Backend (Simulado)</span>
                   <strong>Node.js</strong>
               </div>
@@ -390,44 +391,49 @@
           </div>
       </div>
       
-      </div>
-
+    </div>
+    
   </div>
 
-  <script>
+<script>
+    // Elementos do DOM
     const homeCardsView = document.getElementById('home-cards-view');
     const supportCardsView = document.getElementById('support-cards-view');
     const signupCardsView = document.getElementById('signup-cards-view');
-    const listCardsView = document.getElementById('list-cards-view'); 
-    
+    const listCardsView = document.getElementById('list-cards-view');
     const subScreens = document.querySelectorAll('.sub-screen');
     const homeSubScreens = document.querySelectorAll('.home-sub');
     const supportSubScreens = document.querySelectorAll('.support-sub');
     const signupSubScreens = document.querySelectorAll('.signup-sub');
-    
     const featureCards = document.querySelectorAll('.feature-card');
     const backButtons = document.querySelectorAll('.back-button');
     const contentDiv = document.querySelector('.content');
-
     const navLinks = document.querySelectorAll('.nav-link');
     const contentScreens = document.querySelectorAll('.content-screen');
-    const body = document.body; // NOVO: Referência ao body para trocar o tema
-    
+    const body = document.body;
+
     // Simulação de JSON para a Conta (Local Storage)
     const ACCOUNT_STORAGE_KEY = 'manifestSampleAccount';
-    const THEME_STORAGE_KEY = 'manifestSampleTheme'; // NOVO: Chave para o tema
+    const THEME_STORAGE_KEY = 'manifestSampleTheme';
     const DEFAULT_AVATAR = 'default-avatar.png';
-    
-    // Elementos do Widget de Perfil
+
+    // Elementos do Widget de Perfil e Sidebar
     const widgetUsername = document.getElementById('widget-username');
     const widgetProfilePic = document.getElementById('widget-profile-pic');
-    
-    // NOVO: Elemento do Switch de Tema
+    const userProfileWidget = document.getElementById('user-profile-widget');
+    const sidebar = document.querySelector('.sidebar');
+    const mainLayout = document.querySelector('.main-layout'); // NOVO: Elemento principal
+
+    // Elementos do Switch de Tema
     const themeSwitch = document.getElementById('theme-switch');
-    
-    // NOVO: Elemento do Título Principal
+
+    // Elemento do Título Principal
     const mainTitle = document.getElementById('main-title');
 
+
+    // ----------------------------------------------------
+    // FUNÇÕES DE CONTA E PERSISTÊNCIA (JSON LOCAL)
+    // ----------------------------------------------------
 
     function getAccount() {
         const account = localStorage.getItem(ACCOUNT_STORAGE_KEY);
@@ -440,11 +446,250 @@
 
     function saveAccount(accountData) {
         localStorage.setItem(ACCOUNT_STORAGE_KEY, JSON.stringify(accountData));
-        // Chama a atualização do widget e da prévia sempre que a conta for salva
-        updateProfileDisplay(); 
+        updateProfileDisplay();
     }
     
-    // NOVO: Função para alternar o Tema (Dark/Light)
+    // Função para simular o login
+    document.getElementById('login-btn').addEventListener('click', () => {
+        const emailOrUsername = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+        const loginMessage = document.getElementById('login-message');
+        const account = getAccount();
+
+        if (account && 
+            (account.email === emailOrUsername || account.username === emailOrUsername) && 
+            account.password === password) {
+            
+            loginMessage.textContent = '✅ Login bem-sucedido! Redirecionando...';
+            loginMessage.style.color = '#00ff80';
+            
+            // Remove a classe de tela cheia e vai para a Home
+            setTimeout(() => {
+                showScreen('home-screen');
+                updateProfileDisplay(); // Atualiza e remove a classe logged-out
+                loginMessage.textContent = ''; 
+            }, 1500);
+            
+        } else {
+            loginMessage.textContent = '❌ Credenciais inválidas ou conta não encontrada.';
+            loginMessage.style.color = '#ff4444';
+        }
+    });
+
+    // Função para simular a criação de conta
+    document.getElementById('create-account-btn').addEventListener('click', () => {
+        const username = document.getElementById('new-username').value;
+        const email = document.getElementById('new-email').value;
+        const password = document.getElementById('new-password').value;
+        const fileInput = document.getElementById('new-profile-pic');
+        const createMessage = document.getElementById('create-account-message');
+
+        if (!username || !email || !password) {
+            createMessage.textContent = '❌ Por favor, preencha todos os campos.';
+            createMessage.style.color = '#ff4444';
+            return;
+        }
+
+        // Simulação de verificação de conta existente
+        if (getAccount()) {
+            createMessage.textContent = '❌ Uma conta já existe localmente. Por favor, faça login.';
+            createMessage.style.color = '#ffaa00';
+            return;
+        }
+
+        // Lógica para carregar a imagem (simulada)
+        let profilePicture = DEFAULT_AVATAR;
+        if (fileInput.files.length > 0) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const newAccount = { username, email, password, profilePicture: e.target.result };
+                saveAccount(newAccount);
+                createMessage.textContent = '✅ Conta criada com sucesso! Faça login.';
+                createMessage.style.color = '#00ff80';
+                setTimeout(() => {
+                    showScreen('login-sub-screen'); // Vai para a tela de login
+                    document.getElementById('login-email').value = email; // Preenche o email
+                    createMessage.textContent = ''; 
+                }, 1500);
+            };
+            reader.readAsDataURL(fileInput.files[0]);
+        } else {
+            const newAccount = { username, email, password, profilePicture };
+            saveAccount(newAccount);
+            createMessage.textContent = '✅ Conta criada com sucesso! Faça login.';
+            createMessage.style.color = '#00ff80';
+            setTimeout(() => {
+                showScreen('login-sub-screen');
+                document.getElementById('login-email').value = email;
+                createMessage.textContent = '';
+            }, 1500);
+        }
+    });
+
+
+    // ----------------------------------------------------
+    // FUNÇÕES DE VISIBILIDADE E NAVEGAÇÃO
+    // ----------------------------------------------------
+
+    /**
+     * NOVO: Controla a visibilidade da barra lateral e do widget de perfil.
+     * @param {boolean} loggedIn Se o usuário está logado.
+     */
+    function toggleSiteVisibility(loggedIn) {
+        if (loggedIn) {
+            // MOSTRA O CONTEÚDO (LOGADO)
+            userProfileWidget.classList.remove('logged-out');
+            mainLayout.classList.remove('logged-out'); 
+        } else {
+            // ESCONDE O CONTEÚDO (DESLOGADO)
+            userProfileWidget.classList.add('logged-out');
+            mainLayout.classList.add('logged-out'); 
+            
+            // Certifica-se de que a tela de login/cadastro é a única visível
+            showScreen('signup-screen');
+            showSubScreen('signup-cards-view', 'signup');
+        }
+    }
+
+    function updateProfileDisplay() {
+        const account = getAccount();
+        const isLoggedIn = !!account;
+        
+        const username = isLoggedIn ? account.username : 'Visitante'; 
+        const profilePic = isLoggedIn ? account.profilePicture : DEFAULT_AVATAR;
+
+        // 1. Atualiza o Widget Flutuante
+        if (widgetUsername) widgetUsername.innerText = username;
+        if (widgetProfilePic) widgetProfilePic.src = profilePic;
+
+        // 2. Atualiza a Prévia em Configurações
+        const profilePicElement = document.getElementById('profile-pic-preview');
+        if (profilePicElement) {
+            profilePicElement.src = profilePic;
+        }
+        
+        // NOVO: Chama o controle de visibilidade
+        toggleSiteVisibility(isLoggedIn);
+    }
+
+    function showScreen(targetId) {
+        contentScreens.forEach(screen => {
+            screen.classList.remove('active');
+        });
+        document.getElementById(targetId).classList.add('active');
+        
+        // Atualiza o link ativo da sidebar
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.dataset.target === targetId) {
+                link.classList.add('active');
+            }
+        });
+        
+        // Se for para uma tela que não é o Sign-up, garante que o título principal apareça
+        if (targetId !== 'signup-screen' && mainTitle) {
+            mainTitle.style.display = 'block';
+        } else if (mainTitle) {
+             // O CSS .logged-out já esconde, mas por garantia:
+            mainTitle.style.display = mainLayout.classList.contains('logged-out') ? 'none' : 'block';
+        }
+    }
+
+    function showSubScreen(targetId, screenType) {
+        // Esconde todas as sub-telas e cards views do tipo de tela atual
+        let targetSubScreens;
+        let targetCardView;
+        if (screenType === 'home') {
+            targetSubScreens = homeSubScreens;
+            targetCardView = homeCardsView;
+        } else if (screenType === 'support') {
+            targetSubScreens = supportSubScreens;
+            targetCardView = supportCardsView;
+        } else if (screenType === 'signup') {
+            targetSubScreens = signupSubScreens;
+            targetCardView = signupCardsView;
+        }
+
+        targetSubScreens.forEach(sub => {
+            sub.classList.remove('active');
+        });
+        targetCardView.classList.remove('active');
+        
+        // Mostra o target
+        if (targetId.includes('cards-view')) {
+            document.getElementById(targetId).classList.add('active');
+        } else {
+            document.getElementById(targetId).classList.add('active');
+        }
+    }
+
+    // ----------------------------------------------------
+    // EVENT LISTENERS
+    // ----------------------------------------------------
+
+    // Navegação principal
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const target = link.dataset.target;
+            
+            // Se o usuário não estiver logado e tentar ir para Home ou Suporte, barra
+            if (!getAccount() && (target === 'home-screen' || target === 'support-screen')) {
+                showScreen('signup-screen');
+                return;
+            }
+            
+            showScreen(target);
+            
+            // Certifica-se de que a visualização de cards da tela é exibida por padrão
+            if (target === 'home-screen') showSubScreen('home-cards-view', 'home');
+            if (target === 'support-screen') showSubScreen('support-cards-view', 'support');
+            if (target === 'signup-screen') showSubScreen('signup-cards-view', 'signup');
+
+        });
+    });
+
+    // Navegação via Cards
+    featureCards.forEach(card => {
+        card.addEventListener('click', () => {
+            const targetSub = card.dataset.targetSub;
+            const screenType = card.closest('.content-screen').id.split('-')[0]; // home, support, signup
+            showSubScreen(targetSub, screenType);
+        });
+    });
+
+    // Botões Voltar
+    backButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const targetSub = button.dataset.targetSub;
+            const screenType = button.dataset.screenType;
+            showSubScreen(targetSub, screenType);
+        });
+    });
+
+    // Accordion FAQ
+    document.querySelectorAll('.faq-question').forEach(question => {
+        question.addEventListener('click', () => {
+            const answer = question.nextElementSibling;
+            const isOpen = answer.classList.contains('open');
+
+            // Fecha todas as outras respostas do mesmo container (opcional, mas bom UX)
+            document.querySelectorAll('.faq-answer.open').forEach(openAnswer => {
+                if (openAnswer !== answer) {
+                    openAnswer.classList.remove('open');
+                }
+            });
+            
+            // Alterna a resposta clicada
+            if (isOpen) {
+                answer.classList.remove('open');
+            } else {
+                answer.classList.add('open');
+            }
+        });
+    });
+    
+    // Funções de Tema (Mantidas para funcionar)
     function toggleTheme() {
         if (themeSwitch.checked) {
             body.classList.remove('light-theme');
@@ -455,42 +700,35 @@
         }
     }
 
-    // NOVO: Função para carregar o Tema Salvo
     function loadTheme() {
         const savedTheme = localStorage.getItem(THEME_STORAGE_KEY) || 'dark';
         if (savedTheme === 'light') {
             body.classList.add('light-theme');
-            if (themeSwitch) themeSwitch.checked = false; // Desmarca se for tema claro
+            if (themeSwitch) themeSwitch.checked = false;
         } else {
             body.classList.remove('light-theme');
-            if (themeSwitch) themeSwitch.checked = true; // Mantém marcado se for tema escuro
+            if (themeSwitch) themeSwitch.checked = true;
         }
     }
 
-    // NOVO: Listener para o Switch de Tema
     if(themeSwitch) {
         themeSwitch.addEventListener('change', toggleTheme);
     }
     
-    // NOVO: Função para Exportar Dados (Simulação)
+    // Simulação de Exportação de Dados (JSON)
     document.getElementById('export-data-btn').addEventListener('click', () => {
         const accountData = getAccount();
         if (!accountData) {
             alert('Nenhuma conta encontrada para exportar.');
             return;
         }
-
-        // Remove a imagem em Base64 para não travar o download (opcional)
         const dataToExport = {
             username: accountData.username,
             email: accountData.email,
-            // A senha não deve ser exportada em ambiente real, mas mantida para simulação
-            password: accountData.password, 
+            password: accountData.password,
             hasProfilePicture: accountData.profilePicture !== DEFAULT_AVATAR,
-            // Adicione aqui outros dados que você queira exportar
             exportDate: new Date().toISOString()
         };
-        
         const jsonString = JSON.stringify(dataToExport, null, 2);
         const blob = new Blob([jsonString], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
@@ -504,315 +742,6 @@
         alert('✅ Exportação concluída! Verifique sua pasta de downloads.');
     });
 
-    // Função para atualizar a foto de perfil em Configurações e no Widget Flutuante
-    function updateProfileDisplay() {
-        const account = getAccount();
-        const username = (account && account.username) ? account.username : 'Visitante';
-        const profilePic = (account && account.profilePicture) ? account.profilePicture : DEFAULT_AVATAR;
-
-        // 1. Atualiza o Widget Flutuante
-        if (widgetUsername) widgetUsername.innerText = username;
-        if (widgetProfilePic) widgetProfilePic.src = profilePic;
-
-        // 2. Atualiza a Prévia em Configurações
-        const profilePicElement = document.getElementById('profile-pic-preview');
-        if (profilePicElement) {
-            profilePicElement.src = profilePic;
-        }
-    }
-
-    function showScreen(targetId) {
-        contentScreens.forEach(screen => {
-            screen.classList.remove('active');
-        });
-        navLinks.forEach(nav => {
-            nav.classList.remove('active');
-        });
-
-        const targetScreen = document.getElementById(targetId);
-        if (!targetScreen) return;
-        targetScreen.classList.add('active');
-        document.querySelector(`.nav-link[data-target="${targetId}"]`).classList.add('active');
-
-        let newTitle = '';
-        
-        // Esconde todas as sub-views por segurança antes de mostrar a correta
-        homeCardsView.classList.remove('active');
-        supportCardsView.classList.remove('active');
-        if(signupCardsView) signupCardsView.classList.remove('active');
-        subScreens.forEach(screen => screen.classList.remove('active'));
-
-
-        if (targetId === 'home-screen') {
-            newTitle = 'Portal de Busca Steam';
-            showSubScreen('home-cards-view', 'home');
-        } else if (targetId === 'support-screen') {
-            newTitle = 'Suporte';
-            showSubScreen('support-cards-view', 'support');
-            updateProfileDisplay(); // Atualiza a foto de perfil ao entrar na tela de suporte
-        } else if (targetId === 'signup-screen') {
-            newTitle = 'Sign-Up';
-            showSubScreen('signup-cards-view', 'signup');
-        } else if (targetId === 'terms-screen') {
-            newTitle = 'Política e Termos de Uso';
-        } else if (targetId === 'about-screen') {
-            newTitle = 'Sobre o Projeto';
-        }
-
-        // NOVO: Atualiza o título principal dinamicamente
-        if (mainTitle) {
-            mainTitle.innerText = newTitle;
-        }
-
-    }
-
-    navLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const targetId = link.dataset.target;
-            showScreen(targetId);
-        });
-    });
-
-    /**
-     * Função refatorada para controlar a visualização de Cards e Subtelas
-     * @param {string} targetId O ID do elemento a ser mostrado (ex: 'search-sub-screen' ou 'home-cards-view').
-     * @param {string} screenType O tipo de tela pai ('home', 'support', 'signup') para saber quais elementos esconder.
-     */
-    function showSubScreen(targetId, screenType) {
-        // Esconde todas as sub-telas do tipo específico
-        let currentSubScreens = [];
-        if (screenType === 'home') currentSubScreens = homeSubScreens;
-        else if (screenType === 'support') currentSubScreens = supportSubScreens;
-        else if (screenType === 'signup') currentSubScreens = signupSubScreens;
-
-        currentSubScreens.forEach(screen => screen.classList.remove('active'));
-
-        // Esconde a view de cards principal para o tipo específico
-        if (screenType === 'home') homeCardsView.classList.remove('active');
-        else if (screenType === 'support') supportCardsView.classList.remove('active');
-        else if (screenType === 'signup') signupCardsView.classList.remove('active');
-        
-        // Tenta mostrar o alvo (que pode ser uma sub-tela ou a tela de cards principal)
-        const targetElement = document.getElementById(targetId);
-        if (targetElement) {
-            targetElement.classList.add('active');
-        }
-    }
-    
-    // Listener para Cards (navega para a sub-tela)
-    featureCards.forEach(card => {
-        card.addEventListener('click', (e) => {
-            const targetSubId = card.dataset.targetSub;
-            if (targetSubId) {
-                // Descobre a tela pai
-                const parentScreen = card.closest('.content-screen');
-                let screenType = '';
-                if (parentScreen.id.includes('home')) screenType = 'home';
-                else if (parentScreen.id.includes('support')) screenType = 'support';
-                else if (parentScreen.id.includes('signup')) screenType = 'signup';
-                
-                showSubScreen(targetSubId, screenType);
-            }
-        });
-    });
-
-    // Listener para Botões Voltar
-    backButtons.forEach(button => {
-        button.addEventListener('click', (e) => {
-            const targetSubId = button.dataset.targetSub; // Deve ser o ID da view de cards (ex: 'home-cards-view')
-            const screenType = button.dataset.screenType; // O tipo da tela ('home', 'support', etc.)
-            showSubScreen(targetSubId, screenType);
-        });
-    });
-
-    // Listener para o FAQ (Acordeão)
-    document.querySelectorAll('.faq-question').forEach(question => {
-        question.addEventListener('click', () => {
-            const faqItem = question.closest('.faq-item');
-            faqItem.classList.toggle('open');
-        });
-    });
-    
-    // --- Lógica de Conta (Simulação) ---
-
-    // Função de Codificação Base64 para simular armazenamento de imagem
-    function toBase64(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = error => reject(error);
-        });
-    }
-
-    // Navegação para a tela de edição
-    document.getElementById('edit-account-btn').addEventListener('click', () => {
-        showSubScreen('personalize-sub-screen', 'support');
-        const account = getAccount();
-        if (account) {
-            document.getElementById('edit-username').value = account.username || '';
-            document.getElementById('edit-email').value = account.email || '';
-            document.getElementById('edit-password').value = account.password || ''; 
-            // Não pré-carregamos a foto, apenas mostramos a prévia
-        }
-    });
-
-    // Lógica para Salvar Conta (Criação ou Edição)
-    async function handleAccountSave(type) { // 'create' ou 'edit'
-        let username, email, password, fileInput;
-        let messageDiv;
-        
-        if (type === 'create') {
-            username = document.getElementById('new-username').value.trim();
-            email = document.getElementById('new-email').value.trim();
-            password = document.getElementById('new-password').value.trim();
-            fileInput = document.getElementById('new-profile-pic');
-            messageDiv = document.getElementById('create-account-message');
-        } else { // 'edit'
-            username = document.getElementById('edit-username').value.trim();
-            email = document.getElementById('edit-email').value.trim();
-            password = document.getElementById('edit-password').value.trim();
-            fileInput = document.getElementById('edit-profile-pic');
-            messageDiv = document.getElementById('personalize-message');
-        }
-        
-        messageDiv.innerText = '';
-
-        if (!username || !email || !password) {
-            messageDiv.innerText = 'Preencha todos os campos obrigatórios.';
-            return;
-        }
-
-        let profilePicture = getAccount() ? getAccount().profilePicture : DEFAULT_AVATAR;
-        if (fileInput.files.length > 0) {
-            try {
-                profilePicture = await toBase64(fileInput.files[0]);
-            } catch (e) {
-                messageDiv.innerText = 'Erro ao processar a imagem. Tente novamente.';
-                return;
-            }
-        }
-        
-        const accountData = {
-            username,
-            email,
-            password, // Em um ambiente real, a senha deve ser hasheada!
-            profilePicture 
-        };
-        
-        saveAccount(accountData);
-        messageDiv.innerText = `✅ Conta ${type === 'create' ? 'criada' : 'atualizada'} com sucesso!`;
-        
-        // Limpar campos após sucesso (exceto se for edição, onde pode querer manter o texto)
-        if (type === 'create') {
-            document.getElementById('new-username').value = '';
-            document.getElementById('new-email').value = '';
-            document.getElementById('new-password').value = '';
-            fileInput.value = ''; // Limpa o input file
-        }
-    }
-
-    // Listeners para os botões de Salvar/Criar
-    document.getElementById('create-account-btn').addEventListener('click', () => handleAccountSave('create'));
-    document.getElementById('save-account-btn').addEventListener('click', () => handleAccountSave('edit'));
-    
-    // Simulação de Login
-    document.getElementById('login-btn').addEventListener('click', () => {
-        const email = document.getElementById('login-email').value.trim();
-        const password = document.getElementById('login-password').value.trim();
-        const messageDiv = document.getElementById('login-message');
-        messageDiv.innerText = '';
-        
-        const account = getAccount();
-        
-        if (!account) {
-             messageDiv.innerText = '❌ Nenhuma conta cadastrada localmente.';
-             return;
-        }
-        
-        if (account.email === email && account.password === password) {
-            messageDiv.innerText = `✅ Login realizado! Bem-vindo, ${account.username}.`;
-            // Em um cenário real, você faria muito mais aqui (salvar token, etc.)
-            // Aqui apenas atualizamos o widget
-            updateProfileDisplay();
-        } else {
-            messageDiv.innerText = '❌ Email ou Senha incorretos.';
-        }
-    });
-
-    // Lógica para mudar a foto de perfil diretamente da tela de Configurações
-    document.getElementById('change-profile-pic-btn').addEventListener('click', () => {
-        // Simplesmente aciona o input file escondido da tela de edição (solução rápida)
-        document.getElementById('edit-profile-pic').click();
-    });
-
-    document.getElementById('edit-profile-pic').addEventListener('change', async (e) => {
-        if (e.target.files.length > 0) {
-            // Se o usuário está na tela de Configurações e muda a foto por aqui
-            const file = e.target.files[0];
-            const base64Image = await toBase64(file);
-            
-            const account = getAccount();
-            if (account) {
-                account.profilePicture = base64Image;
-                saveAccount(account);
-            } else {
-                // Se não tem conta, apenas atualiza a prévia
-                document.getElementById('profile-pic-preview').src = base64Image;
-                widgetProfilePic.src = base64Image;
-            }
-        }
-    });
-    
-    // --- Inicialização ---
-    loadTheme();
-    updateProfileDisplay();
-    // Garante que a tela inicial esteja correta ao carregar
-    showScreen('home-screen'); 
-    
-    
-    // Código da busca (mantido inalterado)
-    document.getElementById('buscar').addEventListener('click', async () => {
-      const gameId = document.getElementById('gameId').value.trim();
-      const resDiv = document.getElementById('resultado');
-
-      if (!gameId) {
-        resDiv.innerText = 'Digite um ID primeiro.';
-        return;
-      }
-
-      try {
-        // NOTA: Esta requisição só funcionará se você tiver um servidor rodando
-        // que responda aos endpoints /buscar
-        const resp = await fetch('/buscar', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ gameId })
-        });
-
-        const contentType = resp.headers.get('content-type');
-
-        if (contentType && contentType.includes('application/json')) {
-          const data = await resp.json();
-          resDiv.innerText = data.msg;
-        } else {
-          const blob = await resp.blob();
-          const url = window.URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = gameId; 
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-          window.URL.revokeObjectURL(url);
-          resDiv.innerText = '✅ Download iniciado!';
-        }
-      } catch (err) {
-        resDiv.innerText = '❌ Erro ao comunicar com o servidor. Tente novamente. (Detalhe: ' + err.message + ')';
-      }
-    });
-    
     // Código da Lista de IDs (Simulação)
     function loadIdList() {
         const idListContent = document.getElementById('id-list-content');
@@ -828,21 +757,28 @@
             <p style="margin-top: 20px; color: #888;">* Lista apenas para demonstração. O sistema real usa a SteamDB.</p>
         `;
     }
-    
-    // Carregar a lista quando o link for clicado (ou a sub-tela de lista for ativada)
+
     document.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', () => {
             if (link.dataset.target === 'home-screen') {
-                 // Adicionado evento para carregar a lista quando a tela principal Home é carregada
-                 // e garantir que o list-sub-screen tenha o conteúdo se for acessado
                  document.querySelector('.feature-card[data-target-sub="list-sub-screen"]').addEventListener('click', loadIdList, { once: true });
             }
         });
     });
 
-    // Chama loadIdList se o usuário entrar na sub-tela de lista
-    document.querySelector('.feature-card[data-target-sub="list-sub-screen"]').addEventListener('click', loadIdList, { once: true });
-    
-  </script>
+    // ----------------------------------------------------
+    // INICIALIZAÇÃO
+    // ----------------------------------------------------
+    loadTheme();
+    updateProfileDisplay(); // Inicia a página checando o login e controlando a visibilidade
+
+    const currentAccount = getAccount();
+    if (!currentAccount) {
+        showScreen('signup-screen'); 
+    } else {
+        showScreen('home-screen'); 
+    }
+</script>
+
 </body>
 </html>
